@@ -7,8 +7,20 @@ import styles from './gallery.module.css';
 
 const ITEMS_PER_PAGE = 10;
 
+interface Photo {
+  id: string;
+  alt_description: string | null;
+  urls: {
+    small: string;
+    thumb: string;
+  };
+  links: {
+    html: string;
+  };
+}
+
 const Gallery: React.FC = () => {
-  const [photos, setPhotos] = useState<any[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -107,7 +119,6 @@ const Gallery: React.FC = () => {
         )}
       </div>
     </div>
-
   );
 };
 
