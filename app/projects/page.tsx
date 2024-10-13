@@ -1,10 +1,26 @@
 export default function Projects() {
   const projects = [
-    { title: 'Project 1', description: 'Description of project 1' },
-    { title: 'Project 2', description: 'Description of project 2' },
-    { title: 'Project 3', description: 'Description of project 3' },
-    { title: 'Project 4', description: 'Description of project 4' },
-  ]
+    { 
+      title: 'Crop-Core_Tech', 
+      description: 'A crop yield prediction app using machine learning, with API integration and state rainfall data.' 
+    },
+    { 
+      title: 'Pill-Dispenser', 
+      description: 'A pill dispenser system controlled via a React app, integrated with ESP32 and servo motors.' 
+    },
+    { 
+      title: 'Treximo', 
+      description: 'A game built using Pygame, focusing on a unique interactive experience.' 
+    },
+    { 
+      title: 'Music-Player', 
+      description: 'A Python music player application built with a simple UI for playing local music files.' 
+    },
+    { 
+      title: 'To-Do App', 
+      description: 'A task management app built with React, featuring task sorting, due date management, and a clean UI.' 
+    }
+  ];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -18,5 +34,5 @@ export default function Projects() {
         ))}
       </div>
     </div>
-  )
+  );
 }
