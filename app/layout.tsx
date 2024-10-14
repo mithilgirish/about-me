@@ -1,23 +1,28 @@
 import './globals.css';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'My Portfolio',
-  description: 'A showcase of my skills and projects',
+  title: 'Mithil Girish - Digital Craftsman',
+  description: 'Crafting digital experiences that inspire',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/projects">Projects</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-          </ul>
-        </nav>
-        {children}
+      <body className={`${inter.className} min-h-screen bg-black text-white`}>
+        <header className="p-3 bg-black z-20 relative">
+          <nav className="flex justify-end space-x-8">
+            <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
+            <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
+            <a href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</a>
+            <a href="/gallery" className="text-gray-300 hover:text-white transition-colors">Gallery</a>
+          </nav>
+        </header>
+        <main className="container mx-auto px-4 py-8">
+          {children}
+        </main>
       </body>
     </html>
   );

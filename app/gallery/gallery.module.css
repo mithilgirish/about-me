@@ -1,12 +1,14 @@
+/* Container for the gallery */
 .galleryContainer {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
     padding: 20px;
 }
 
+/* Layout for the photos in the gallery */
 .photoList {
-    column-count: 3; /* Default to 3 columns */
-    column-gap: 16px; /* Space between columns */
+    column-count: 3; /* 3 columns for large screens */
+    column-gap: 20px; /* Increase space between columns */
 }
 
 @media (max-width: 1024px) {
@@ -21,118 +23,98 @@
     }
 }
 
+/* Individual photo items */
 .photoItem {
-    break-inside: avoid; /* Prevents breakage of items across columns */
-    margin-bottom: 16px; /* Space below each photo item */
-    position: relative; /* Relative positioning for inner elements */
-    border-radius: 8px; /* Rounded corners */
-    overflow: hidden; /* Hide overflow */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
-    transition: transform 0.2s; /* Smooth scale transition */
+    break-inside: avoid; /* Prevents items from breaking across columns */
+    margin-bottom: 20px; /* Space below each item */
+    border-radius: 12px; /* Softer rounded corners */
+    overflow: hidden; /* No overflow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
 
 .photoItem:hover {
-    transform: scale(1.02); /* Scale up on hover */
+    transform: scale(1.05); /* Slight scale on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Slightly larger shadow */
 }
 
 .image {
-    display: block; /* Block level for images */
-    width: 100%; /* Full width of the container */
+    display: block;
+    width: 100%; /* Full width */
     height: auto; /* Maintain aspect ratio */
 }
 
+/* Pagination section */
 .pagination {
-    margin-top: 20px; /* Space above pagination */
-    display: flex; /* Flexbox for layout */
-    justify-content: center; /* Center items */
-    align-items: center; /* Align vertically */
-    gap: 10px; /* Space between pagination elements */
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 12px; /* Adjust spacing between pagination buttons */
 }
 
-/* Combined styles for Previous and Next buttons */
-.prevNext {
-    display: flex; /* Flexbox layout */
-    justify-content: center; /* Center items */
-    gap: 20px; /* Space between Previous/Next buttons */
-    margin-top: 10px; /* Space above the navigation buttons */
-}
-
-.prevNext button {
-    padding: 10px 15px; /* Button padding */
+/* Styles for pagination buttons */
+.pageNumber, .prevNext button {
+    padding: 10px 20px; /* Uniform padding */
+    border-radius: 8px; /* Rounded corners */
     border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.2s, transform 0.2s; /* Transition effects */
-    backdrop-filter: blur(10px); /* Blur background */
-    color: white; /* Text color */
-    background: linear-gradient(90deg, rgba(50, 50, 50, 0.8), rgba(70, 70, 70, 0.8)); /* Dark grey gradient */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
-    margin: 0 5px; /* Margin between buttons */
+    background-color: #e0e0e0; /* Light grey background for inactive state */
+    color: #333; /* Dark grey text for visibility */
+    font-family: 'San Francisco', sans-serif; /* Use a clean, modern font */
+    font-size: 16px; /* Slightly larger for readability */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.prevNext button:hover {
-    background: linear-gradient(90deg, rgba(70, 70, 70, 0.8), rgba(90, 90, 90, 0.8)); /* Darker on hover */
+.pageNumber:hover, .prevNext button:hover {
+    background-color: #d4d4d6; /* Darker grey on hover */
+    transform: scale(1.05); /* Slight scale-up on hover */
 }
 
-/* Page Number Styles */
-.pageNumber {
-    padding: 10px 15px; /* Button padding */
-    border-radius: 5px; /* Rounded corners */
-    font-family: 'Montserrat', sans-serif; /* Modern font */
-    background: rgba(240, 240, 240, 0.8); /* Light background for page numbers */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.2s, transform 0.2s; /* Transition effects */
-}
-
-.pageNumber:hover {
-    background: rgba(220, 220, 220, 0.8); /* Light hover effect */
-}
-
-/* Pagination Button Styles */
-.pagination button {
-    padding: 10px 15px; /* Button padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.2s, transform 0.2s; /* Transition effects */
-    backdrop-filter: blur(10px); /* Blur background */
-    color: white; /* Text color */
-    background: linear-gradient(90deg, rgba(0, 112, 243, 0.8), rgba(0, 91, 181, 0.8)); /* Original blue gradient */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
-    margin: 0 5px; /* Margin between buttons */
-}
-
-.pagination button:hover {
-    background: linear-gradient(90deg, rgba(0, 91, 181, 0.8), rgba(0, 72, 141, 0.8)); /* Darker on hover */
-    transform: scale(1.05); /* Scale up on hover */
+.pageNumber.active, .pagination button[aria-current="true"] {
+    background-color: #0071e3; /* Apple-like blue for the active page */
+    color: white; /* White text on active */
 }
 
 .pagination button:disabled {
-    background-color: rgba(204, 204, 204, 0.8); /* Grey background for disabled */
-    cursor: not-allowed; /* Not-allowed cursor */
+    background-color: #f0f0f0; /* Lighter grey for disabled */
+    cursor: not-allowed; /* Not allowed cursor */
 }
 
-.pagination button[aria-current="true"] {
-    background: rgba(0, 71, 171, 0.9); /* Highlight active page */
+/* Previous/Next button styles */
+.prevNext {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
-/* Additional Styles for Better Responsiveness */
+.prevNext button {
+    background-color: #0071e3; /* Apple blue for navigation buttons */
+    color: white;
+    padding: 12px 24px; /* More padding for a sleek look */
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.prevNext button:hover {
+    background-color: #005bb5; /* Darker blue on hover */
+}
+
+/* Responsive design for smaller screens */
 @media (max-width: 480px) {
     .galleryContainer {
-        padding: 10px; /* Reduced padding on small screens */
+        padding: 15px;
     }
 
     .pagination {
-        flex-wrap: wrap; /* Wrap pagination items on small screens */
+        flex-wrap: wrap; /* Wrap pagination items on smaller screens */
     }
 
     .pagination button {
-        padding: 8px 12px; /* Smaller button padding */
-        font-size: 14px; /* Smaller font size */
+        padding: 8px 16px; /* Reduce padding */
+        font-size: 14px; /* Smaller font */
     }
 
     .prevNext button {
-        padding: 8px 12px; /* Smaller button padding for navigation */
+        padding: 8px 16px; /* Reduce padding for navigation buttons */
     }
 }

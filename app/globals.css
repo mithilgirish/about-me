@@ -1,86 +1,87 @@
-/* app/globals.css */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-body {
-    font-family: 'Montserrat', sans-serif; /* Apply the modern font */
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    margin: 0;
-    padding: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define Root Variables */
 :root {
-  --color-bg: #121212;
-  --color-text: #ffffff;
-  --color-accent: #00ffcc;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 
+                'Segoe UI', Roboto, 'Helvetica Neue', Arial, 
+                'Noto Sans', sans-serif, 
+                'Apple Color Emoji', 'Segoe UI Emoji', 
+                'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-
-
-.bg-dark-bg {
-  background-color: var(--color-bg);
+/* Global Styles */
+html, body {
+  height: 100%; /* Ensure the html and body take full height */
+  margin: 0; /* Remove default margin */
+  overflow-y: auto; /* Allow vertical scrolling for the entire page */
+  font-family: var(--font-sans);
+  @apply bg-black text-white; /* Tailwind utility classes for background and text color */
 }
 
-.text-accent {
-  color: var(--color-accent);
+/* Keyframes for Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.bg-accent {
-  background-color: var(--color-accent);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.text-dark-bg {
-  color: var(--color-bg);
+/* Animation Classes */
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out;
 }
 
-nav a {
-  transition: color 0.3s ease;
+.animate-fadeInUp {
+  animation: fadeInUp 1s ease-out;
 }
 
-nav a:hover {
-  color: var(--color-accent);
+/* Gradient Backgrounds */
+.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
 
-button {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.from-gray-900 {
+  --tw-gradient-from: #111827; /* Dark Gray */
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0));
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 255, 204, 0.1);
+.to-black {
+  --tw-gradient-to: #000000; /* Black */
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
 }
 
-nav {
-  display: flex;
-  justify-content: flex-end; /* Push navigation to the right */
-  align-items: center; /* Align items vertically in the center */
-  padding-right: 40px; /* Add some space on the right for "Nanbar" */
+::-webkit-scrollbar-track {
+  background: #2c2c2c; /* Track color */
 }
 
-nav ul {
-  display: flex;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  margin-top: 30px;
-  margin-right: 20px; /* Space between nav links and the "Nanbar" section */
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a; /* Thumb color */
+  border-radius: 6px; /* Rounded corners */
 }
 
-nav ul li {
-  margin-right: 20px; /* Spacing between the list items */
+::-webkit-scrollbar-thumb:hover {
+  background: #6a6a6a; /* Thumb color on hover */
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: rgb(255, 255, 255); /* Customize link color */
-  font-weight: bold; /* Customize text style */
+/* For Firefox */
+* {
+  scrollbar-width: thin; /* Set scrollbar width */
+  scrollbar-color: #4a4a4a #2c2c2c; /* Thumb color and track color */
 }
-
-nav ul li a:hover {
-  color: #0070f3; /* Add a hover effect */
-}
-
