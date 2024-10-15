@@ -4,8 +4,16 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Mithil Girish - Digital Craftsman',
-  description: 'Crafting digital experiences that inspire',
+  title: 'Mithil Girish',
+  description: '2nd Year CSE student at VIT Chennai',
+  keywords: 'Mithil Girish, VIT Chennai, Computer Science, Student, Web Development, Portfolio',
+  author: 'Mithil Girish',
+  og: {
+    title: 'Mithil Girish',
+    description: '2nd Year CSE student at VIT Chennai',
+    // url: 'https://yourwebsite.com', // You can remove this line for now
+    // image: 'https://yourwebsite.com/image.jpg', // You can remove this line for now
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
