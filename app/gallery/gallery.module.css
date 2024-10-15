@@ -53,31 +53,25 @@
 }
 
 /* Styles for pagination buttons */
-.pageNumber, .prevNext button {
-    padding: 10px 20px; /* Uniform padding */
+.pageNumber {
     border-radius: 8px; /* Rounded corners */
     border: none; /* No border */
-    background-color: #e0e0e0; /* Light grey background for inactive state */
-    color: #333; /* Dark grey text for visibility */
+    background: transparent; /* No background */
+    color: #e3e3e3; /* Dark grey text for visibility */
     font-family: 'San Francisco', sans-serif; /* Use a clean, modern font */
     font-size: 16px; /* Slightly larger for readability */
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
-.pageNumber:hover, .prevNext button:hover {
-    background-color: #d4d4d6; /* Darker grey on hover */
-    transform: scale(1.05); /* Slight scale-up on hover */
+.pageNumber:hover {
+    color: #0071e3; /* Change color on hover */
 }
 
-.pageNumber.active, .pagination button[aria-current="true"] {
-    background-color: #0071e3; /* Apple-like blue for the active page */
-    color: white; /* White text on active */
-}
-
-.pagination button:disabled {
-    background-color: #f0f0f0; /* Lighter grey for disabled */
-    cursor: not-allowed; /* Not allowed cursor */
+.pageNumber.active {
+    font-weight: bold; /* Bold text for active page */
+    text-decoration: underline; /* Underline for active page */
+    color: #0071e3; /* Change text color to highlight the active page */
 }
 
 /* Previous/Next button styles */
@@ -107,11 +101,6 @@
 
     .pagination {
         flex-wrap: wrap; /* Wrap pagination items on smaller screens */
-    }
-
-    .pagination button {
-        padding: 8px 16px; /* Reduce padding */
-        font-size: 14px; /* Smaller font */
     }
 
     .prevNext button {

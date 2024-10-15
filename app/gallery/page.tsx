@@ -98,7 +98,7 @@ const Gallery: React.FC = () => {
           <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? styles.active : ''}
+            className={`${styles.pageNumber} ${currentPage === index + 1 ? styles.active : ''}`} // Apply styles conditionally
           >
             {index + 1}
           </button>

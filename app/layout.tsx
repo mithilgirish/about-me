@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-black text-white`}>
+      <body className={`${inter.className} min-h-screen bg-black text-white flex flex-col`}>
         <header className="p-3 bg-black z-20 relative">
           <nav className="flex justify-end space-x-8">
             <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
@@ -20,9 +20,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/gallery" className="text-gray-300 hover:text-white transition-colors">Gallery</a>
           </nav>
         </header>
-        <main className="container mx-auto px-4 py-8">
+        <main className="flex-grow container mx-auto px-4 py-8 ">
           {children}
         </main>
+        <footer className="text-center py-3 bg-gray-800 bg-opacity-30 backdrop-blur-md rounded-lg shadow-lg text-white z-20">
+        <p className="text-sm">© {new Date().getFullYear()} @mithilgirish</p>
+        </footer>
       </body>
     </html>
   );
