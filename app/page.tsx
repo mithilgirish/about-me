@@ -202,26 +202,7 @@ const Home = () => {
             </Link>
           </Section>
 
-          <Section id="contact">
-            <h2 className="text-4xl font-bold mb-4">Contact</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              Let&apos;s connect! Whether you have a project in mind or just want to say hi, I&apos;d love to hear from you.
-            </p>
-            <Link href="/contact">
-              <motion.button
-                className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Get in Touch
-              </motion.button>
-            </Link>
-          </Section>
+         
         </div>
       </main>
 
