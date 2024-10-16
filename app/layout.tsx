@@ -19,8 +19,8 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-black text-white flex flex-col`}>
-        <header className="p-3 bg-black z-20 relative">
+      <body className={`${inter.className} min-h-screen text-white flex flex-col`}>
+        <header className="p-3  z-20 relative">
           <nav className="flex justify-end space-x-8">
             <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
             <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>

@@ -121,17 +121,43 @@ const Home = () => {
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
       <main className="relative z-10">
         <div className="h-screen flex flex-col justify-center items-center">
-          <motion.div className="text-center px-4 max-w-4xl w-full" style={{ opacity }}>
-            <p className="text-xl text-gray-400 mb-4">Hi there 👋 I&apos;m</p>
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 animate-pulse">
+          <motion.div 
+            className="text-center px-4 max-w-4xl w-full mt-[-100px]" // Added negative top margin
+            style={{ opacity }} 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+          >
+            <motion.p 
+              className="text-xl text-gray-400 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              Hi there 👋 I&apos;m
+            </motion.p>
+            
+            <motion.h1
+              className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 2, delay: 0.5 }}
+            >
               Mithil Girish
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 mx-auto">
+            </motion.h1>
+            
+            <motion.p 
+              className="text-xl md:text-2xl text-gray-300 mb-12 mx-auto"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 2, delay: 1 }}
+            >
               2nd Year CSE student at VIT Chennai
-            </p>
+            </motion.p>
+            
             <div className="absolute inset-x-0 flex justify-center animate-bounce">
-              <ChevronDown size={32} />
-            </div>
+    <ChevronDown size={32} />
+  </div>
           </motion.div>
         </div>
 
