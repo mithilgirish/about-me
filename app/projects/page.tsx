@@ -1,38 +1,143 @@
+"use client";
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import * as THREE from 'three';
+import Link from 'next/link';
+
+interface SectionProps {
+  children: React.ReactNode;
+  id: string;
+}
+
+const Section: React.FC<SectionProps> = ({ children, id }) => {
+  const [ref, inView] = useInView({
+    threshold: 0.1,
+  });
+
+  return (
+    <motion.section
+      id={id}
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.5 }}
+      className="mb-20"
+    >
+      {children}
+    </motion.section>
+  );
+};
+
 export default function Projects() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
   const projects = [
     { 
       title: 'Crop-Core_Tech', 
-      description: 'A crop yield prediction app using machine learning, with API integration and state rainfall data.' 
+      description: 'A crop yield prediction app using machine learning, with API integration and state rainfall data.',
+      github: 'https://github.com/yourusername/Crop-Core_Tech'
     },
     { 
       title: 'Pill-Dispenser', 
-      description: 'A pill dispenser system controlled via a React app, integrated with ESP32 and servo motors.' 
+      description: 'A pill dispenser system controlled via a React app, integrated with ESP32 and servo motors.',
+      github: 'https://github.com/yourusername/Pill-Dispenser'
     },
     { 
       title: 'Treximo', 
-      description: 'A game built using Pygame, focusing on a unique interactive experience.' 
+      description: 'A game built using Pygame, focusing on a unique interactive experience.',
+      github: 'https://github.com/yourusername/Treximo'
     },
     { 
       title: 'Music-Player', 
-      description: 'A Python music player application built with a simple UI for playing local music files.' 
+      description: 'A Python music player application built with a simple UI for playing local music files.',
+      github: 'https://github.com/yourusername/Music-Player'
     },
     { 
       title: 'To-Do App', 
-      description: 'A task management app built with React, featuring task sorting, due date management, and a clean UI.' 
+      description: 'A task management app built with React, featuring task sorting, due date management, and a clean UI.',
+      github: 'https://github.com/yourusername/To-Do-App'
     }
   ];
 
+  useEffect(() => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current! });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const starsGeometry = new THREE.BufferGeometry();
+    const starCount = 1000;
+    const positionArray = new Float32Array(starCount * 3);
+
+    for (let i = 0; i < starCount * 3; i++) {
+      positionArray[i] = (Math.random() - 0.5) * 2000;
+    }
+
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
+    const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+    const stars = new THREE.Points(starsGeometry, starsMaterial);
+
+    scene.add(stars);
+    camera.position.z = 5;
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      stars.rotation.y += 0.001;
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return () => {
+      document.body.removeChild(renderer.domElement);
+    };
+  }, []);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4 text-amber-900">My Projects</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {projects.map((project, index) => (
-          <div key={index} className="bg-amber-100 p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-            <p>{project.description}</p>
-          </div>
-        ))}
-      </div>
+    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans overflow-x-hidden">
+      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
+      <main className="relative z-10">
+        <div className="container mx-auto px-4 py-20">
+          <Section id="projects-intro">
+            <motion.h1 
+              className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
+              My Projects
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-gray-300 mb-12"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              Explore a selection of my projects showcasing my skills in web development, machine learning, and more. Click on any project to view its GitHub repository.
+            </motion.p>
+          </Section>
+
+          <Section id="project-grid">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project, index) => (
+                <Link href={project.github} key={index} passHref>
+                  <motion.div
+                    className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg cursor-pointer transition-all duration-300 hover:bg-opacity-70 hover:shadow-xl hover:scale-105"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <h2 className="text-2xl font-semibold mb-3 text-blue-400">{project.title}</h2>
+                    <p className="text-gray-300">{project.description}</p>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </Section>
+        </div>
+      </main>
     </div>
   );
 }
