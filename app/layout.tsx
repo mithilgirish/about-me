@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
         <main className="flex-grow container mx-auto px-4 py-8 ">
           {children}
+          <SpeedInsights />
         </main>
         <footer className="text-center py-3 bg-gray-800 bg-opacity-30 backdrop-blur-md rounded-lg shadow-lg text-white z-20">
         <p className="text-sm">© {new Date().getFullYear()} @mithilgirish</p>

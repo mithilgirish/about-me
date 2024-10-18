@@ -13,6 +13,7 @@
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.10",
     "@tailwindcss/typography": "^0.5.15",
+    "@vercel/speed-insights": "^1.0.12",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.9",
