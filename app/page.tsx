@@ -117,7 +117,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans overflow-x-hidden">
+    <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
       <main className="relative z-10">
         <div className="h-screen flex flex-col justify-center items-center">

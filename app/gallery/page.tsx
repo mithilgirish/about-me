@@ -137,7 +137,7 @@ const Gallery: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans overflow-x-hidden">
+      <div className="relative min-h-screen  text-white font-sans overflow-x-hidden">
         <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
         <div className="flex justify-center items-center h-screen relative z-10">
           <div className="spinner"></div>
@@ -148,7 +148,7 @@ const Gallery: React.FC = () => {
 
   if (error) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans overflow-x-hidden">
+      <div className="relative min-h-screen  text-white font-sans overflow-x-hidden">
         <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
         <div className="text-center text-red-500 relative z-10">Error: {error}</div>
       </div>
@@ -156,7 +156,7 @@ const Gallery: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans overflow-x-hidden">
+    <div className="relative min-h-screen  text-white font-sans overflow-x-hidden">
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
       <main className="relative z-10">
         <div className="max-w-screen-xl mx-auto p-6" ref={scrollRef}>
