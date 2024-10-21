@@ -4,7 +4,9 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import * as THREE from 'three';
-import { Linkedin, Github, Mail, DollarSign, LucideIcon } from 'lucide-react';
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
+import { faLinkedin, faGithub, faInstagram, faUnsplash } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 
 interface SectionProps {
   children: React.ReactNode;
@@ -32,23 +34,39 @@ const Section: React.FC<SectionProps> = ({ children, id }) => {
 
 interface SocialButtonProps {
   href: string;
-  icon: React.ReactElement<LucideIcon>;
+  icon: FontAwesomeIconProps['icon'];
   label: string;
+  platform: keyof typeof gradientStyles;
 }
 
-const SocialButton: React.FC<SocialButtonProps> = ({ href, icon, label }) => (
+const gradientStyles = {
+  linkedin: 'linear-gradient(135deg, rgba(10, 102, 194, 0.1), rgba(10, 102, 194, 0.2))',
+  github: 'linear-gradient(135deg, rgba(36, 41, 46, 0.1), rgba(36, 41, 46, 0.2))',
+  instagram: 'linear-gradient(135deg, rgba(193, 53, 132, 0.1), rgba(193, 53, 132, 0.2))',
+  email: 'linear-gradient(135deg, rgba(255, 196, 0, 0.1), rgba(255, 196, 0, 0.2))',
+  fiverr: 'linear-gradient(135deg, rgba(0, 171, 85, 0.1), rgba(0, 171, 85, 0.2))',
+  unsplash: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(169, 169, 169, 0.2))',
+};
+
+const SocialButton: React.FC<SocialButtonProps> = ({ href, icon, label, platform }) => (
   <motion.a
     href={href}
-    className="group flex items-center space-x-2 p-4 rounded-lg transition duration-300 bg-gray-800 hover:bg-gray-700 shadow-md hover:shadow-lg"
+    className="flex items-center space-x-2 p-4 rounded-lg transition-all duration-300 backdrop-blur-md hover:bg-opacity-30"
+    style={{
+      background: gradientStyles[platform],
+      boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+      border: '1px solid rgba(255, 255, 255, 0.18)',
+      color: 'white',
+    }}
     target="_blank"
     rel="noopener noreferrer"
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
   >
-    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 group-hover:bg-gray-600 transition duration-300">
-      {React.cloneElement(icon)}
+    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-opacity-20 backdrop-blur-md" style={{ background: 'rgba(255, 255, 255, 0.2)' }}>
+      <FontAwesomeIcon icon={icon} />
     </div>
-    <span className="text-white font-medium group-hover:text-gray-300 transition duration-300">{label}</span>
+    <span className="font-medium">{label}</span>
   </motion.a>
 );
 
@@ -123,8 +141,7 @@ const About: React.FC = () => {
             >
               Hello! I&apos;m Mithil Girish, a versatile full-stack web and mobile app developer, graphic designer, photographer, 
               and technology enthusiast. My passion lies in combining creativity with technical expertise to build user-centric 
-              digital experiences. My journey has taken me across domains, including AI-powered apps, game development, IoT (Internet of Things) solutions, 
-              and responsive web and mobile applications. I thrive on challenges that integrate hardware and software to solve real-world problems.
+              digital experiences.
             </motion.p>
           </Section>
 
@@ -136,7 +153,7 @@ const About: React.FC = () => {
               <li>Backend Development (Express.js, Django Rest Framework)</li>
               <li>UI/UX Design and Responsive Web Design</li>
               <li>Graphic Design (Adobe Photoshop, UI Design)</li>
-              <li>Photography </li>
+              <li>Photography</li>
               <li>Game Development (Unity, C#)</li>
               <li>IoT & Hardware Integration (ESP32, Arduino)</li>
             </ul>
@@ -152,28 +169,39 @@ const About: React.FC = () => {
             >
               <SocialButton
                 href="https://www.linkedin.com/in/mithilgirish/"
-                icon={<Linkedin />}
+                icon={faLinkedin}
                 label="LinkedIn"
+                platform="linkedin"
               />
               <SocialButton
                 href="https://github.com/mithilgirish"
-                icon={<Github />}
+                icon={faGithub}
                 label="GitHub"
+                platform="github"
+              />
+              <SocialButton
+                href="https://www.instagram.com/mithilgirish/"
+                icon={faInstagram}
+                label="Instagram"
+                platform="instagram"
               />
               <SocialButton
                 href="mailto:t.r.mithil@gmail.com"
-                icon={<Mail />}
+                icon={faEnvelope}
                 label="Email"
+                platform="email"
               />
               <SocialButton
                 href="https://www.fiverr.com/mithilgirish"
-                icon={<DollarSign />}
+                icon={faDollarSign}
                 label="Fiverr"
+                platform="fiverr"
               />
               <SocialButton
-                href="https://www.upwork.com/freelancers/~mithilgirish"
-                icon={<DollarSign />}
-                label="Upwork"
+                href="https://unsplash.com/@mithilgirish"
+                icon={faUnsplash}
+                label="Unsplash"
+                platform="unsplash"
               />
             </motion.div>
           </Section>
