@@ -6,34 +6,41 @@
 
 /* Define Root Variables */
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 
-                'Segoe UI', Roboto, 'Helvetica Neue', Arial, 
-                'Noto Sans', sans-serif, 
-                'Apple Color Emoji', 'Segoe UI Emoji', 
-                'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+               'Noto Sans', sans-serif,
+               'Apple Color Emoji', 'Segoe UI Emoji',
+               'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 /* Global Styles */
 html, body {
-  height: 100%; /* Ensure the html and body take full height */
-  margin: 0; /* Remove default margin */
-  overflow-y: auto; /* Allow vertical scrolling for the entire page */
+  height: 100%;
+  margin: 0;
   font-family: var(--font-sans);
-  @apply bg-black text-white; /* Tailwind utility classes for background and text color */
+  @apply bg-black text-white;
+}
+
+/* Ensure letter spacing and line height are adequate */
+h1 {
+  @apply text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600;
+  line-height: 1.2; /* Ensure the line height is not too tight */
+  padding-bottom: 0.6rem; /* Add extra padding to avoid cutting off descenders like 'y' */
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Keyframes for Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @keyframes fadeInUp {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(20px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -41,11 +48,11 @@ html, body {
 
 /* Animation Classes */
 .animate-fadeIn {
-  animation: fadeIn 1s ease-out;
+  animation: fadeIn 1s ease-out both;
 }
 
 .animate-fadeInUp {
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp 1s ease-out both;
 }
 
 /* Gradient Backgrounds */
@@ -54,34 +61,33 @@ html, body {
 }
 
 .from-gray-900 {
-  --tw-gradient-from: #111827; /* Dark Gray */
+  --tw-gradient-from: #111827;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0));
 }
 
 .to-black {
-  --tw-gradient-to: #000000; /* Black */
+  --tw-gradient-to: #000000;
 }
 
 /* Custom Scrollbar Styles */
 ::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #2c2c2c; /* Track color */
+  background: #2c2c2c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4a4a4a; /* Thumb color */
-  border-radius: 6px; /* Rounded corners */
+  background: #4a4a4a;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6a6a6a; /* Thumb color on hover */
+  background: #6a6a6a;
 }
 
-/* For Firefox */
 * {
-  scrollbar-width: thin; /* Set scrollbar width */
-  scrollbar-color: #4a4a4a #2c2c2c; /* Thumb color and track color */
+  scrollbar-width: thin;
+  scrollbar-color: #4a4a4a #2c2c2c;
 }

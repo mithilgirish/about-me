@@ -15,6 +15,7 @@ interface Photo {
   urls: {
     small: string;
     thumb: string;
+    full:string;
   };
   links: {
     html: string;
@@ -185,7 +186,7 @@ const Gallery: React.FC = () => {
                   >
                     <a href={photo.links.html} target="_blank" rel="noopener noreferrer">
                       <Image
-                        src={photo.urls.small}
+                        src={photo.urls.full}
                         alt={photo.alt_description || 'Photo'}
                         width={300}
                         height={200}
@@ -204,62 +205,134 @@ const Gallery: React.FC = () => {
 
           {/* Pagination */}
           <Section id="pagination">
-            <div className="mt-8 flex justify-center gap-2">
-              {currentPage > 1 && (
-                <motion.button
-                  onClick={handlePrevPage}
-                  className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                    border: '1px solid rgba(255, 255, 255, 0.18)',
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Previous
-                </motion.button>
-              )}
+  <div className="mt-8 flex flex-col justify-center gap-4 items-center">
+    {/* Display the current set of page numbers */}
+    <div className="flex gap-2 justify-center">
+      {/* Always show the first page */}
+      <motion.button
+        key={1}
+        onClick={() => handlePageChange(1)}
+        className="px-4 py-1 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-30 transition-all duration-300"
+        style={{
+          background: currentPage === 1
+            ? 'rgba(128, 0, 128, 0.3)'
+            : 'rgba(173, 216, 230, 0.2)',
+          boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          color: currentPage === 1
+            ? 'rgba(255, 255, 255, 1)'
+            : 'rgba(255, 255, 255, 0.8)',
+        }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        1
+      </motion.button>
 
-              {Array.from({ length: totalPages }, (_, index) => (
-                <motion.button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  className="px-4 py-1 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-30 transition-all duration-300"
-                  style={{
-                    background: currentPage === index + 1 
-                      ? 'rgba(128, 0, 128, 0.3)' 
-                      : 'rgba(173, 216, 230, 0.2)',
-                    boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)', 
-                    color: currentPage === index + 1 
-                      ? 'rgba(255, 255, 255, 1)' 
-                      : 'rgba(255, 255, 255, 0.8)',
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {index + 1}
-                </motion.button>
-              ))}
+      {/* Ellipses if there are more pages between */}
+      {currentPage > 4 && <span className="text-white">...</span>}
 
-              {currentPage < totalPages && (
-                <motion.button
-                  onClick={handleNextPage}
-                  className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                    border: '1px solid rgba(255, 255, 255, 0.18)',
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Next
-                </motion.button>
-              )}
-            </div>
-          </Section>
+      {/* Pages around the current page */}
+      {Array.from({ length: 5 }, (_, index) => {
+        const actualPage = currentPage - 2 + index;
+        if (actualPage > 1 && actualPage < totalPages) {
+          return (
+            <motion.button
+              key={actualPage}
+              onClick={() => handlePageChange(actualPage)}
+              className="px-4 py-1 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-30 transition-all duration-300"
+              style={{
+                background: currentPage === actualPage
+                  ? 'rgba(128, 0, 128, 0.3)'
+                  : 'rgba(173, 216, 230, 0.2)',
+                boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                color: currentPage === actualPage
+                  ? 'rgba(255, 255, 255, 1)'
+                  : 'rgba(255, 255, 255, 0.8)',
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {actualPage}
+            </motion.button>
+          );
+        }
+        return null;
+      })}
+
+      {/* Ellipses if there are more pages towards the end */}
+      {currentPage < totalPages - 3 && <span className="text-white">...</span>}
+
+      {/* Always show the last page */}
+      {totalPages > 1 && (
+        <motion.button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className="px-4 py-1 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-30 transition-all duration-300"
+          style={{
+            background: currentPage === totalPages
+              ? 'rgba(128, 0, 128, 0.3)'
+              : 'rgba(173, 216, 230, 0.2)',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
+            color: currentPage === totalPages
+              ? 'rgba(255, 255, 255, 1)'
+              : 'rgba(255, 255, 255, 0.8)',
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {totalPages}
+        </motion.button>
+      )}
+    </div>
+
+    {/* "Previous" and "Next" buttons below */}
+    <div className="flex justify-between gap-2 w-full max-w-xs">
+      {currentPage > 1 && (
+        <motion.button
+          onClick={handlePrevPage}
+          className="w-full px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Previous
+        </motion.button>
+      )}
+
+      {currentPage < totalPages && (
+        <motion.button
+          onClick={handleNextPage}
+          className="w-full px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Next
+        </motion.button>
+      )}
+    </div>
+  </div>
+</Section>
+
+<style jsx>{`
+  @media (max-width: 640px) {
+    button {
+      font-size: 14px;
+      padding: 10px 16px;
+    }
+  }
+`}</style>
         </div>
       </main>
     </div>
