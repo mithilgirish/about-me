@@ -12,9 +12,11 @@ export const metadata = {
   og: {
     title: 'Mithil Girish',
     description: '2nd Year CSE student at VIT Chennai',
-    // url: 'https://yourwebsite.com', // You can remove this line for now
+    url: 'https://about-me-mithil-girishs-projects.vercel.app', // You can remove this line for now
     // image: 'https://yourwebsite.com/image.jpg', // You can remove this line for now
   },
+    type: 'website',
+
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
