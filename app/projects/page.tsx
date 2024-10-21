@@ -37,31 +37,31 @@ export default function Projects() {
       title: "Crop-Core_Tech",
       description:
         "A crop yield prediction app using machine learning, with API integration and state rainfall data.",
-      github: "https://github.com/yourusername/Crop-Core_Tech",
+      github: "https://github.com/mithilgirish/Crop-Core_Tech",
     },
     {
       title: "Pill-Dispenser",
       description:
         "A pill dispenser system controlled via a React app, integrated with ESP32 and servo motors.",
-      github: "https://github.com/yourusername/Pill-Dispenser",
+      github: "https://github.com/mithilgirish/Pill-Dispenser",
     },
     {
       title: "Treximo",
       description:
         "A game built using Pygame, focusing on a unique interactive experience.",
-      github: "https://github.com/yourusername/Treximo",
+      github: "https://github.com/mithilgirish/Treximo",
     },
     {
       title: "Music-Player",
       description:
         "A Python music player application built with a simple UI for playing local music files.",
-      github: "https://github.com/yourusername/Music-Player",
+      github: "https://github.com/mithilgirish/Music-Player",
     },
     {
       title: "To-Do App",
       description:
         "A task management app built with React, featuring task sorting, due date management, and a clean UI.",
-      github: "https://github.com/yourusername/To-Do-App",
+      github: "https://github.com/mithilgirish/To-Do-App",
     },
   ];
 
