@@ -1,5 +1,4 @@
 "use client";
-import './globals.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import * as THREE from 'three';
@@ -10,6 +9,11 @@ import Link from 'next/link';
 interface SectionProps {
   children: React.ReactNode;
   id: string;
+}
+declare global {
+  interface Window {
+    scrollTimeout?: NodeJS.Timeout; // or just Timeout if you are not using NodeJS types
+  }
 }
 
 const Section: React.FC<SectionProps> = ({ children, id }) => {
@@ -36,6 +40,7 @@ const Home = () => {
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 100], [1, 0]);
   const [showScrollUpArrow, setShowScrollUpArrow] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false); // State to track scrolling
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -93,12 +98,19 @@ const Home = () => {
 
     const animate = () => {
       requestAnimationFrame(animate);
-      stars.rotation.y += 0.001;
+      
+      // Adjust the scroll speed based on whether the user is scrolling
+      const scrollSpeed = isScrolling ? 0.05: 0.001; // Faster when scrolling
+      stars.rotation.y += scrollSpeed;
+
       renderer.render(scene, camera);
     };
 
     const handleScroll = () => {
       setShowScrollUpArrow(window.scrollY > window.innerHeight);
+      setIsScrolling(true);
+      clearTimeout(window.scrollTimeout); // Clear the timeout if already set
+      window.scrollTimeout = setTimeout(() => setIsScrolling(false), 100); // Set timeout to reset scrolling state
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -110,7 +122,7 @@ const Home = () => {
       document.body.removeChild(renderer.domElement);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [scrollY, isScrolling]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -138,12 +150,24 @@ const Home = () => {
             </motion.p>
             
             <motion.h1
-              className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+              className="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 relative"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 2, delay: 0.5 }}
             >
-              Mithil Girish
+              <span className="relative inline-block">
+                <span
+                  className="relative bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600
+                             transition-all duration-300 ease-in-out"
+                  style={{
+                    textShadow: `0 0 30px rgba(96, 165, 250, 0.2),
+                                 0 0 40px rgba(96, 165, 250, 0.1),
+                                 0 0 60px rgba(147, 51, 234, 0.05)`,
+                  }}
+                >
+                  Mithil Girish
+                </span>
+              </span>
             </motion.h1>
             
             <motion.p 
@@ -156,12 +180,23 @@ const Home = () => {
             </motion.p>
             
             <div className="absolute inset-x-0 flex justify-center animate-bounce">
-    <ChevronDown size={32} />
-  </div>
+              <button
+                className="focus:outline-none"
+                onClick={() => {
+                  document.getElementById('GAP')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <ChevronDown size={32} />
+              </button>
+            </div>
           </motion.div>
         </div>
 
         <div className="container mx-auto px-4 py-20">
+          <Section id="GAP">
+            <h2 className="text-4xl font-bold mb-4"></h2>
+          </Section>
+
           <Section id="about">
             <h2 className="text-4xl font-bold mb-4">About Me</h2>
             <p className="text-lg text-gray-300 mb-6">
