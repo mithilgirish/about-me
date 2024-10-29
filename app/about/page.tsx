@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import * as THREE from 'three';
@@ -125,24 +126,46 @@ const About: React.FC = () => {
       <main className="relative z-10">
         <div className="container mx-auto px-4 py-20">
           <Section id="about-intro">
-            <motion.h1
-              className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-            >
-              About Me
-            </motion.h1>
-            <motion.p
-              className="text-xl text-gray-300 mb-12"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-            >
-              Hello! I&apos;m Mithil Girish, a versatile full-stack web and mobile app developer, graphic designer, photographer, 
-              and technology enthusiast. My passion lies in combining creativity with technical expertise to build user-centric 
-              digital experiences.
-            </motion.p>
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
+              <motion.div
+                className="lg:w-1/3"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8 }}
+              >
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+                  <Image
+                    src="/images/DP-mithil.png" // Ensure path starts with "/"
+                    alt="Mithil Girish"
+                    width={216} // Width in pixels
+                    height={216} // Height in pixels
+                    className="relative rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl"
+                    />
+                </div>
+              </motion.div>
+              
+              <div className="lg:w-2/3">
+                <motion.h1
+                  className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1 }}
+                >
+                  About Me
+                </motion.h1>
+                <motion.p
+                  className="text-xl text-gray-300 mb-12"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                >
+                  Hello! I&apos;m Mithil Girish, a versatile full-stack web and mobile app developer, graphic designer, photographer, 
+                  and technology enthusiast. My passion lies in combining creativity with technical expertise to build user-centric 
+                  digital experiences.
+                </motion.p>
+              </div>
+            </div>
           </Section>
 
           <Section id="skills">
