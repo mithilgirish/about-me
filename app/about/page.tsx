@@ -136,10 +136,10 @@ const About: React.FC = () => {
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
                   <Image
-                    src="/images/DP-mithil.png" // Ensure path starts with "/"
+                    src="/images/DP-mithil.png" 
                     alt="Mithil Girish"
-                    width={216} // Width in pixels
-                    height={216} // Height in pixels
+                    width={216} 
+                    height={216} 
                     className="relative rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl"
                     />
                 </div>

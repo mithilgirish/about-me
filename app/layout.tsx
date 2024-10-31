@@ -4,20 +4,39 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
+
 export const metadata = {
+  // Basic Metadata
   title: 'Mithil Girish',
   description: '2nd Year CSE student at VIT Chennai',
-  keywords: 'Mithil Girish, VIT Chennai, Computer Science, Student, Web Development, Portfolio',
+  // Extended Meta Tags
+  keywords: 'Mithil Girish, VIT Chennai, Computer Science Engineering, Full Stack Developer, Web Development, Student Portfolio, Software Engineering, React Developer, JavaScript Developer, Chennai Developer',
   author: 'Mithil Girish',
-  og: {
-    title: 'Mithil Girish',
-    description: '2nd Year CSE student at VIT Chennai',
-    url: 'https://about-me-mithil-girishs-projects.vercel.app', // You can remove this line for now
-    // image: 'https://yourwebsite.com/image.jpg', // You can remove this line for now
+  
+  
+  // Additional SEO Tags
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
-    type: 'website',
+  
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
+  },
 
-};
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mithilgirish.dev',
+  },
+}
+
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
