@@ -1,20 +1,46 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Metadata, Viewport } from 'next'
+
 
 const inter = Inter({ subsets: ['latin'] });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#4285F4',
+} as const
 
-export const metadata = {
-  // Basic Metadata
+export const metadata: Metadata = {
+  metadataBase: new URL('https://www.mithilgirish.dev'),
+  
   title: 'Mithil Girish',
-  description: '2nd Year CSE student at VIT Chennai',
-  // Extended Meta Tags
-  keywords: 'Mithil Girish, VIT Chennai, Computer Science Engineering, Full Stack Developer, Web Development, Student Portfolio, Software Engineering, React Developer, JavaScript Developer, Chennai Developer',
-  author: 'Mithil Girish',
+  description: '2nd Year CSE student at VIT Chennai, A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.',
   
+  keywords: 'Mithil Girish, Full Stack Developer, Web Development, Graphic Design, UI/UX, Game Development, React Developer, JavaScript Developer, Chennai Developer',
   
-  // Additional SEO Tags
+  authors: [{ name: 'Mithil Girish', url: 'https://www.mithilgirish.dev' }],
+  
+  icons: {
+    icon: '/favicon.ico', 
+  },
+  
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.mithilgirish.dev',
+    title: 'Mithil Girish - Full Stack Developer',
+    description: 'A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development',
+    siteName: 'Mithil Girish Portfolio',
+  },
+  
+  twitter: {
+    card: 'summary',
+    title: 'Mithil Girish - Full Stack Developer',
+    description: 'A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development',
+  },
+  
   robots: {
     index: true,
     follow: true,
@@ -26,15 +52,17 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
-  
+
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
   },
 
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mithilgirish.dev',
+    canonical: 'https://www.mithilgirish.dev',
   },
-}
+} as const
+
+
 
 
 
