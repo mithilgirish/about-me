@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.mithilgirish.dev'),
   
   title: 'Mithil Girish',
-  description: '2nd Year CSE student at VIT Chennai, A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.',
+  description: 'Co-Founder @channelise, CSE (Data Science) Sophomore @ VIT Chennai, A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.',
   
   keywords: 'Mithil Girish, Full Stack Developer, Web Development, Graphic Design, UI/UX, Game Development, React Developer, JavaScript Developer, Chennai Developer',
   

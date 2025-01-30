@@ -134,7 +134,7 @@ const Home = () => {
       <main className="relative z-10">
         <div className="h-screen flex flex-col justify-center items-center">
           <motion.div 
-            className="text-center px-4 max-w-4xl w-full mt-[-100px]" // Added negative top margin
+            className="text-center px-4 max-w-4xl w-full mt-[-150px]" // Added negative top margin
             style={{ opacity }} 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -170,16 +170,43 @@ const Home = () => {
               </span>
             </motion.h1>
             
-            <motion.p 
-              className="text-xl md:text-2xl text-gray-300 mb-12 mx-auto"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 2, delay: 1 }}
-            >
-              2nd Year CSE student at VIT Chennai
-            </motion.p>
+            <p 
+        className="text-xl md:text-2xl lg:text-3xl text-center relative z-10"
+        
+      >
+
+        <motion.span className="block mb-1"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 2, delay: 1 }}
+        >
+          Co-Founder{" "}
+          <a 
+            href="https://channelise.in" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-block relative group"
+          >
             
-            <div className="absolute inset-x-0 flex justify-center animate-bounce">
+            <span className="bg-gradient-to-r from-orange-500  to-amber-300 bg-clip-text text-transparent font-bold hover:scale-105 transition-transform duration-300">
+              @Channelise
+            </span>
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500  to-amber-300 group-hover:w-full transition-all duration-300"></span>
+          </a>
+        </motion.span>
+        <motion.span className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 2, delay: 1.5 }}>
+          CSE (DS) Sophomore at{" "}
+          <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
+            VIT Chennai
+          </span>
+        </motion.span>
+      </p>
+
+            
+            <div className="absolute inset-x-0 flex justify-center animate-bounce mt-8">
               <button
                 className="focus:outline-none"
                 onClick={() => {

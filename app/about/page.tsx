@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import * as THREE from 'three';
@@ -135,7 +134,7 @@ const About: React.FC = () => {
               >
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-                  <Image
+                  <img
                     src="/images/DP-mithil.png" 
                     alt="Mithil Girish"
                     width={216} 
