@@ -126,23 +126,27 @@ const About: React.FC = () => {
         <div className="container mx-auto px-4 py-20">
           <Section id="about-intro">
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
-              <motion.div
-                className="lg:w-1/3"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="relative group">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-                  <img
-                    src="/images/DP-mithil.png" 
-                    alt="Mithil Girish"
-                    width={216} 
-                    height={216} 
-                    className="relative rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl"
-                    />
-                </div>
-              </motion.div>
+             <motion.div
+  className="ml-6 w-fit mt-20" 
+  initial={{ opacity: 0, scale: 0.8 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.8 }}
+>
+  <div className="relative group w-fit">
+    {/* Glow effect */}
+    <div className="absolute inset-0 -m-2 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-300 animate-tilt z-0"></div>
+
+    {/* Profile image */}
+    <img
+      src="/images/DP-mithil.png"
+      alt="Mithil Girish"
+      width={215}
+      height={215}
+      className="relative z-10 rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl p-1 shadow-xl shadow-black/20 transition-transform duration-500 group-hover:scale-105"
+    />
+  </div>
+</motion.div>
+
               
               <div className="lg:w-2/3">
                 <motion.h1
@@ -159,9 +163,21 @@ const About: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.2 }}
                 >
-                  Hello! I&apos;m Mithil Girish, a versatile full-stack web and mobile app developer, graphic designer, photographer, 
-                  and technology enthusiast. My passion lies in combining creativity with technical expertise to build user-centric 
-                  digital experiences.
+                   <p>
+                    Hello! I&apos;m <span className="text-blue-400 font-semibold">Mithil Girish</span>, a versatile 
+                    technology professional based in <span className="text-purple-400">Chennai, India</span>. I&apos;m 
+                    a passionate full-stack developer, graphic designer, photographer, and technology enthusiast who 
+                    bridges the gap between innovative design and cutting-edge development. 
+                    With expertise spanning web development, mobile applications, IoT systems, and digital design, 
+                    I craft experiences that are not only functional but truly engaging. My journey combines 
+                    technical precision with creative vision to deliver solutions that make a difference, from 
+                    AI-powered farm management apps to innovative web solutions using modern tech stacks.
+                  </p>
+                  <p>
+                    Currently pursuing <span className="text-cyan-400">Bachelor of Technology in Data Science</span> at 
+                    VIT Chennai (2023-2027) while actively contributing to tech communities and building 
+                    impactful projects that solve real-world problems.
+                  </p>
                 </motion.p>
               </div>
             </div>

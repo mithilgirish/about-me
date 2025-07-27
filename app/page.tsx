@@ -194,15 +194,17 @@ const Home = () => {
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500  to-amber-300 group-hover:w-full transition-all duration-300"></span>
           </a>
         </motion.span>
-        <motion.span className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2, delay: 1.5 }}>
-          CSE (DS) Sophomore at{" "}
-          <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
-            VIT Chennai
-          </span>
-        </motion.span>
+        <motion.span
+  className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 2, delay: 1.5 }}
+>
+  Pre-final year CSE(DS) {" "}
+  <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
+    @VIT Chennai
+  </span>
+</motion.span>
       </p>
 
             
