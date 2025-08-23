@@ -1,7 +1,8 @@
 import './globals.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata, Viewport } from 'next'
-
+import { Analytics } from "@vercel/analytics/next"
+import Navbar from '@/components/navbar';
 
 
 export const viewport: Viewport = {
@@ -68,25 +69,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={` min-h-screen text-white flex flex-col bg-black`}>
-        <header className="p-3 z-20 relative">
-  <nav className="flex items-center justify-between">
-    {/* Left: Logo/Icon */}
-    <a href="/" className="flex items-center space-x-10">
-      <img src="/favicon.ico" alt="Logo" className="w-7 h-7" />
-    </a>
-
-    {/* Right: Nav Links */}
-    <div className="flex space-x-8">
-      <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
-      <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
-      <a href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</a>
-      <a href="/gallery" className="text-gray-300 hover:text-white transition-colors">Gallery</a>
-    </div>
-  </nav>
-</header>
+        <Navbar/>
 
         <main >
           {children}
+          <Analytics />
           <SpeedInsights />
         </main>
         <footer className="text-center py-4 pb-4 bg-gray-800 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg text-white z-20 p-2">

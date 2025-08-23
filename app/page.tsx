@@ -12,13 +12,14 @@ interface SectionProps {
 }
 declare global {
   interface Window {
-    scrollTimeout?: NodeJS.Timeout; // or just Timeout if you are not using NodeJS types
+    scrollTimeout?: NodeJS.Timeout; 
   }
 }
 
 const Section: React.FC<SectionProps> = ({ children, id }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
+    triggerOnce: true,
   });
 
   return (
@@ -232,20 +233,36 @@ const Home = () => {
               A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development. <br />
               I&apos;m passionate about blending creativity with technology to build user-centric digital experiences.
             </p>
-            <Link href="/about">
-              <motion.button
-                className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Learn More
-              </motion.button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="/about">
+                <motion.button
+                  className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Learn More
+                </motion.button>
+              </Link>
+              <Link href="/experience">
+                <motion.button
+                  className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Experience
+                </motion.button>
+              </Link>
+            </div>
           </Section>
 
           <Section id="projects">

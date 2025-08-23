@@ -23,6 +23,8 @@ interface Project {
 const Section: React.FC<SectionProps> = ({ children, id }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
+    triggerOnce: true,
+
   });
 
   return (
