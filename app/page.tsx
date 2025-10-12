@@ -1,19 +1,113 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import * as THREE from 'three';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
+
+// --- Custom Three.js Hook ---
+// This moves Three.js effect logic out for tidy composition.
+const useStarfield = (canvasRef: React.RefObject<HTMLCanvasElement>, scrollY: MotionValue<number>) => {
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    // Everything below is your original logic...
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x000000, 0.001);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 1;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvasRef.current,
+      antialias: true,
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const starLayers: THREE.Points[] = [];
+    const layerData = [
+      { count: 1500, size: 0.5, z: -1000, color: 0xaaaaaa },
+      { count: 1000, size: 0.8, z: -500, color: 0xbbbbbb },
+      { count: 500, size: 1.2, z: -200, color: 0xffffff },
+    ];
+    layerData.forEach(layer => {
+      const starsGeometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(layer.count * 3);
+      for (let i = 0; i < layer.count; i++) {
+        const i3 = i * 3;
+        positions[i3] = (Math.random() - 0.5) * 1000;
+        positions[i3 + 1] = (Math.random() - 0.5) * 1000;
+        positions[i3 + 2] = (Math.random() - 0.5) * 1000 + layer.z;
+      }
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const starsMaterial = new THREE.PointsMaterial({
+        size: layer.size,
+        color: layer.color,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const starField = new THREE.Points(starsGeometry, starsMaterial);
+      starLayers.push(starField);
+      scene.add(starField);
+    });
+
+    const mouse = new THREE.Vector2();
+    let isTouch = false;
+    const handleMouseMove = (event: MouseEvent) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      isTouch = true;
+      const touch = event.touches[0];
+      mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    const clock = new THREE.Clock();
+    const animate = () => {
+      const elapsedTime = clock.getElapsedTime();
+      camera.position.y = -scrollY.get() * 0.1;
+      // Parallax disables on mobile
+      if (!isTouch) {
+        camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.02;
+        camera.position.z += (-mouse.y * 0.5 - camera.position.z + 1) * 0.02;
+      }
+      starLayers[0].rotation.y = elapsedTime * 0.01;
+      starLayers[1].rotation.y = elapsedTime * 0.02;
+      starLayers[2].rotation.y = elapsedTime * 0.03;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    animate();
+
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      // More disposal: renderer.dispose(), dispose geometries/materials, etc.
+    };
+  }, [canvasRef, scrollY]);
+};
 
 interface SectionProps {
   children: React.ReactNode;
   id: string;
-}
-declare global {
-  interface Window {
-    scrollTimeout?: NodeJS.Timeout; 
-  }
 }
 
 const Section: React.FC<SectionProps> = ({ children, id }) => {
@@ -28,7 +122,7 @@ const Section: React.FC<SectionProps> = ({ children, id }) => {
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8 }}
       className="mb-20 text-center"
     >
       {children}
@@ -39,203 +133,138 @@ const Section: React.FC<SectionProps> = ({ children, id }) => {
 const Home = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [0, 100], [1, 0]);
+  useStarfield(canvasRef, scrollY); // integrates improved hook
+
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   const [showScrollUpArrow, setShowScrollUpArrow] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false); // State to track scrolling
+
+  // useCallback for better arrow scroll performance
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current! });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    const starsGeometry = new THREE.BufferGeometry();
-    const starCount = 1000;
-    const positionArray = new Float32Array(starCount * 3);
-
-    for (let i = 0; i < starCount * 3; i++) {
-      positionArray[i] = (Math.random() - 0.5) * 2000;
-    }
-
-    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
-    const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff });
-    const stars = new THREE.Points(starsGeometry, starsMaterial);
-
-    scene.add(stars);
-    camera.position.z = 5;
-
-    const shootingStars: THREE.Mesh[] = [];
-
-    const createShootingStar = () => {
-      const shootingStarGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-      const shootingStarMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const shootingStar = new THREE.Mesh(shootingStarGeometry, shootingStarMaterial);
-
-      shootingStar.position.x = (Math.random() - 0.5) * 2000;
-      shootingStar.position.y = (Math.random() - 0.5) * 2000;
-      shootingStar.position.z = 5;
-
-      shootingStars.push(shootingStar);
-      scene.add(shootingStar);
-
-      const duration = Math.random() * 2 + 1;
-      const startTime = performance.now();
-
-      const animateShootingStar = () => {
-        const elapsedTime = (performance.now() - startTime) / 1000;
-        if (elapsedTime < duration) {
-          shootingStar.position.y -= 5 * (elapsedTime / duration);
-          requestAnimationFrame(animateShootingStar);
-        } else {
-          scene.remove(shootingStar);
-        }
-      };
-
-      requestAnimationFrame(animateShootingStar);
-    };
-
-    const shootingStarInterval = setInterval(createShootingStar, 500);
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      // Adjust the scroll speed based on whether the user is scrolling
-      const scrollSpeed = isScrolling ? 0.05: 0.001; // Faster when scrolling
-      stars.rotation.y += scrollSpeed;
-
-      renderer.render(scene, camera);
-    };
-
     const handleScroll = () => {
       setShowScrollUpArrow(window.scrollY > window.innerHeight);
-      setIsScrolling(true);
-      clearTimeout(window.scrollTimeout); // Clear the timeout if already set
-      window.scrollTimeout = setTimeout(() => setIsScrolling(false), 100); // Set timeout to reset scrolling state
     };
-
     window.addEventListener('scroll', handleScroll);
-
-    animate();
-
-    return () => {
-      clearInterval(shootingStarInterval);
-      document.body.removeChild(renderer.domElement);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [scrollY, isScrolling]);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
+    <div className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden">
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
-      <main className="relative z-10">
+
+      {/* Foreground background layer */}
+      <motion.img
+        src="/images/background.png"
+        alt="decorative background"
+        className="fixed bottom-0 left-0 w-full h-auto opacity-35 object-cover z-20 pointer-events-none"
+        style={{
+          y: useTransform(scrollY, [0, 800], [0, 250]),
+          scale: useTransform(scrollY, [0, 800], [1, 1.2])
+        }}
+      />
+
+      <main className="relative">
         <div className="h-screen flex flex-col justify-center items-center">
-          <motion.div 
-            className="text-center px-4 max-w-4xl w-full mt-[-150px]" // Added negative top margin
-            style={{ opacity }} 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2 }}
+          <motion.div
+            className="text-center px-4 max-w-4xl w-full mt-[-190px]"
+            style={{ opacity: heroOpacity }}
           >
-            <motion.p 
-              className="text-xl text-gray-400 mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-            >
-              Hi there 👋 I&apos;m
-            </motion.p>
-            
             <motion.h1
-              className="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 relative"
+              className="text-6xl sm:text-7xl md:text-9xl font-bold mb-6 relative"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 2, delay: 0.5 }}
             >
               <span className="relative inline-block">
                 <span
-                  className="relative bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600
-                             transition-all duration-300 ease-in-out"
-                  style={{
-                    textShadow: `0 0 30px rgba(96, 165, 250, 0.2),
-                                 0 0 40px rgba(96, 165, 250, 0.1),
-                                 0 0 60px rgba(147, 51, 234, 0.05)`,
-                  }}
+                  className="relative bg-clip-text text-transparent shadow-blue-100 bg-gradient-to-r from-gray-100 to-slate-400"
+                  style={{ textShadow: `0 0 30px rgba(96, 165, 250, 0.2), 0 0 60px rgba(147, 51, 234, 0.05)` }}
                 >
                   Mithil Girish
                 </span>
               </span>
             </motion.h1>
-            
-            <p 
-        className="text-xl md:text-2xl lg:text-3xl text-center relative z-10"
-        
-      >
-
-        <motion.span className="block mb-1"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2, delay: 1 }}
-        >
-          Co-Founder{" "}
-          <a 
-            href="https://channelise.in" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="inline-block relative group"
-          >
-            
-            <span className="bg-gradient-to-r from-orange-500  to-amber-300 bg-clip-text text-transparent font-bold hover:scale-105 transition-transform duration-300">
-              @Channelise
-            </span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500  to-amber-300 group-hover:w-full transition-all duration-300"></span>
-          </a>
-        </motion.span>
-        <motion.span
-  className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 2, delay: 1.5 }}
->
-  Pre-final year CSE(DS) {" "}
-  <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
-    @VIT Chennai
-  </span>
-</motion.span>
-      </p>
-
-            
-            <div className="absolute inset-x-0 flex justify-center animate-bounce mt-8">
-              <button
-                className="focus:outline-none"
-                onClick={() => {
-                  document.getElementById('GAP')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+            <p className="text-xl md:text-2xl lg:text-3xl text-center relative z-30">
+              <motion.span
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 2, delay: 1.5 }}
               >
-                <ChevronDown size={32} />
-              </button>
-            </div>
+                Pre-final year CSE(DS){" "}
+                <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
+                  @VIT Chennai
+                </span>
+              </motion.span>
+            </p>
+
+             <motion.a
+      href="https://freelance.mithilgirish.dev/query"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="
+        mt-8 inline-block px-6 py-2 rounded-lg
+        bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.18)]
+        shadow-[0_8px_32px_rgba(31,38,135,0.37)] backdrop-blur-sm
+        transition-all duration-300
+      "
+      whileHover={{ scale: 1.05, background: 'rgba(255, 255, 255, 0.2)' }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
+    >
+      Let&apos;s Build Together
+    </motion.a>
+
+           
           </motion.div>
+
+          
+         <motion.div 
+            className="absolute  flex justify-center z-30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 2 }}
+          >
+            <motion.button
+              aria-label="Scroll down to content "
+              className="focus:outline-none p-2 touch-manipulation hover:text-blue-400 transition-colors mt-40 z-30"
+              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+              animate={{ y: [0, 10, 0] }}
+              transition={{ 
+                duration: 1.5, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <ChevronDown size={32} strokeWidth={2} />
+            </motion.button>
+          </motion.div>
+         
+
+          
         </div>
 
         <div className="container mx-auto px-4 py-20">
           <Section id="GAP">
             <h2 className="text-4xl font-bold mb-4"></h2>
           </Section>
-
           <Section id="about">
             <h2 className="text-4xl font-bold mb-4">About Me</h2>
             <p className="text-lg text-gray-300 mb-6">
-              A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development. <br />
+              A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.
+              <br />
               I&apos;m passionate about blending creativity with technology to build user-centric digital experiences.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/about">
                 <motion.button
+                  aria-label="Learn more about me"
                   className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
                   style={{
                     background: 'rgba(255, 255, 255, 0.1)',
@@ -250,6 +279,7 @@ const Home = () => {
               </Link>
               <Link href="/experience">
                 <motion.button
+                  aria-label="View my experience"
                   className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
                   style={{
                     background: 'rgba(255, 255, 255, 0.1)',
@@ -264,15 +294,16 @@ const Home = () => {
               </Link>
             </div>
           </Section>
-
           <Section id="projects">
             <h2 className="text-4xl font-bold mb-4">Projects</h2>
             <p className="text-lg text-gray-300 mb-6">
-              From AI-powered farm management apps to dynamic web solutions, explore my diverse projects <br />
+              From AI-powered farm management apps to dynamic web solutions, explore my diverse projects
+              <br />
               that showcase my skills in the PERN stack, React Native, and more.
             </p>
             <Link href="/projects">
               <motion.button
+                aria-label="View my projects"
                 className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
                 style={{
                   background: 'rgba(255, 255, 255, 0.1)',
@@ -286,15 +317,16 @@ const Home = () => {
               </motion.button>
             </Link>
           </Section>
-
           <Section id="gallery">
             <h2 className="text-4xl font-bold mb-4">Gallery</h2>
             <p className="text-lg text-gray-300 mb-6">
-              Explore my curated gallery featuring a selection of top photographs I&apos;ve captured and shared on Unsplash, <br />
+              Explore my curated gallery featuring a selection of top photographs I&apos;ve captured and shared on Unsplash,
+              <br />
               where creativity and visual storytelling come together.
             </p>
             <Link href="/gallery">
               <motion.button
+                aria-label="View my gallery"
                 className="px-6 py-2 bg-opacity-10 backdrop-blur-md rounded-lg hover:bg-opacity-20 transition-all duration-300"
                 style={{
                   background: 'rgba(255, 255, 255, 0.1)',
@@ -308,20 +340,17 @@ const Home = () => {
               </motion.button>
             </Link>
           </Section>
-
-         
         </div>
       </main>
-
       {showScrollUpArrow && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          className="fixed bottom-4 right-4 z-50"
+          className="fixed bottom-4 right-4 z-50 cursor-pointer transition-all duration-300"
           onClick={scrollToTop}
         >
-          <ChevronUp size={32} className="text-white cursor-pointer hover:text-gray-400 transition" />
+          <ChevronUp size={32} className="text-white hover:text-gray-400 transition" />
         </motion.div>
       )}
     </div>

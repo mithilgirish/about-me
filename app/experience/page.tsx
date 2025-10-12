@@ -53,7 +53,7 @@ export default function Experience() {
       type: "experience",
       positions: [
         {
-          title: "Summer Internship",
+          title: "Summer Research Internship",
           duration: "Jun 2025 - Jul 2025 • 2 mos"
         }
       ]
@@ -64,8 +64,19 @@ export default function Experience() {
       type: "experience",
       positions: [
         {
-          title: "Summer Internship",
+          title: "SDE Summer Internship",
           duration: "May 2024 - Jul 2024 • 3 mos",
+        }
+      ]
+    },
+    {
+      organization: "Annam.ai",
+      logo: "annamai.png",
+      type: "experience",
+      positions: [
+        {
+          title: "Project Intern",
+          duration: "May 2025 - Jul 2025 • 3 mos",
         }
       ]
     },
@@ -76,7 +87,7 @@ export default function Experience() {
       positions: [
         {
           title: "Co-Founder",
-          duration: "Jan 2025 - Present • 8 mos",
+          duration: "Jan 2025 - Present",
         }
       ]
     },
@@ -89,7 +100,7 @@ export default function Experience() {
       positions: [
         {
           title: "Vice President",
-          duration: "Apr 2025 - Present • 5 mos"
+          duration: "Apr 2025 - Nov 2025 • 8 mos"
         },
         {
           title: "Web Dev lead",
@@ -104,7 +115,7 @@ export default function Experience() {
       positions: [
         {
           title: "Development Lead",
-          duration: "Apr 2025 - Present • 5 mos"
+          duration: "Apr 2025 - Present"
         },
         {
           title: "Web Dev member",
@@ -119,7 +130,7 @@ export default function Experience() {
       positions: [
         {
           title: "Programming Lead",
-          duration: "Aug 2025 - Present • 1 mo"
+          duration: "Aug 2025 - Oct 2025 • 3 mos"
         },
         {
           title: "Programming and analysis member",
@@ -134,7 +145,7 @@ export default function Experience() {
       positions: [
         {
           title: "Web Developer",
-          duration: "Sep 2024 - Present • 1 yr"
+          duration: "Sep 2024 - Sep 2025 • 1 yr"
         }
       ]
     }
@@ -159,6 +170,7 @@ export default function Experience() {
       alt={`${experience.organization} logo`}
       width={100}
       height={100}
+      className="rounded-sm"
     />
           </div>
           <h2 className="text-xl font-semibold text-blue-400 group-hover:text-blue-300 transition-colors">
@@ -309,7 +321,7 @@ export default function Experience() {
         <div className="container mx-auto px-4 py-20">
           <Section id="experience-intro">
             <motion.h1
-              className="text-6xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
+              className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
