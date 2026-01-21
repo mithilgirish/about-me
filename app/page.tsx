@@ -180,51 +180,56 @@ const Home = () => {
             >
               <span className="relative inline-block">
                 <span
-                  className="relative bg-clip-text text-transparent shadow-blue-100 bg-gradient-to-r from-gray-100 to-slate-400"
-                  style={{ textShadow: `0 0 30px rgba(96, 165, 250, 0.2), 0 0 60px rgba(147, 51, 234, 0.05)` }}
+                  className="relative text-white"
+                  style={{ textShadow: `0 0 30px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.1)` }}
                 >
                   Mithil Girish
                 </span>
               </span>
             </motion.h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-center relative z-30">
+            <p className="text-xl md:text-2xl lg:text-3xl text-center relative z-30 mb-8">
               <motion.span
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-300 to-gray-100"
+                className="block text-gray-200 font-light tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-400"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 2, delay: 1.5 }}
               >
-                Pre-final year CSE(DS){" "}
-                <span className="font-semibold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
-                  @VIT Chennai
-                </span>
+                Full Stack Developer & Data Scientist
+              </motion.span>
+              <motion.span
+                className="block text-lg md:text-xl text-gray-400 mt-2 font-mono"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2, delay: 2.5 }}
+              >
+                Pre-Final year at VIT Chennai
               </motion.span>
             </p>
 
-             <motion.a
-      href="https://freelance.mithilgirish.dev/query"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="
+            <motion.a
+              href="https://freelance.mithilgirish.dev/query"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
         mt-8 inline-block px-6 py-2 rounded-lg
         bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.18)]
         shadow-[0_8px_32px_rgba(31,38,135,0.37)] backdrop-blur-sm
         transition-all duration-300
       "
-      whileHover={{ scale: 1.05, background: 'rgba(255, 255, 255, 0.2)' }}
-      whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
-    >
-      Let&apos;s Build Together
-    </motion.a>
+              whileHover={{ scale: 1.05, background: 'rgba(255, 255, 255, 0.2)' }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
+            >
+              Let&apos;s Build Together
+            </motion.a>
 
-           
+
           </motion.div>
 
-          
-         <motion.div 
+
+          <motion.div
             className="absolute  flex justify-center z-30"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -232,22 +237,22 @@ const Home = () => {
           >
             <motion.button
               aria-label="Scroll down to content "
-              className="focus:outline-none p-2 touch-manipulation hover:text-blue-400 transition-colors mt-40 z-30"
+              className="focus:outline-none p-2 touch-manipulation hover:text-blue-400 transition-colors mt-52 z-30"
               onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
               animate={{ y: [0, 10, 0] }}
-              transition={{ 
-                duration: 1.5, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
               whileTap={{ scale: 0.9 }}
             >
               <ChevronDown size={32} strokeWidth={2} />
             </motion.button>
           </motion.div>
-         
 
-          
+
+
         </div>
 
         <div className="container mx-auto px-4 py-20">

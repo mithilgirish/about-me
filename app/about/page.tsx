@@ -126,80 +126,122 @@ const About: React.FC = () => {
         <div className="container mx-auto px-4 py-20">
           <Section id="about-intro">
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
-             <motion.div
-  className="ml-6 w-fit mt-20" 
-  initial={{ opacity: 0, scale: 0.8 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 0.8 }}
->
-  <div className="relative group w-fit">
-    {/* Glow effect */}
-    <div className="absolute inset-0 -m-2 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-300 animate-tilt z-0"></div>
+              <motion.div
+                className="ml-6 w-fit mt-20"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8 }}
+              >
+                <div className="relative group w-fit">
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 -m-2 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-300 animate-tilt z-0"></div>
 
-    {/* Profile image */}
-    <img
-      src="/images/DP-mithil.png"
-      alt="Mithil Girish"
-      width={215}
-      height={215}
-      className="relative z-10 rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl p-1 shadow-xl shadow-black/20 transition-transform duration-500 group-hover:scale-105"
-    />
-  </div>
-</motion.div>
+                  {/* Profile image */}
+                  <img
+                    src="/images/DP-mithil.png"
+                    alt="Mithil Girish"
+                    width={215}
+                    height={215}
+                    className="relative z-10 rounded-full object-cover border-4 border-white/20 backdrop-blur-3xl p-1 shadow-xl shadow-black/20 transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+              </motion.div>
 
-              
+
               <div className="lg:w-2/3">
                 <motion.h1
-                  className="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+                  className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1 }}
                 >
                   About Me
                 </motion.h1>
-                <motion.p
-                  className="text-xl text-gray-300 mb-12"
+                <motion.div
+                  className="text-xl text-gray-400 mb-12 font-light leading-relaxed"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.2 }}
                 >
-                   <p>
-                    Hello! I&apos;m <span className="text-blue-400 font-semibold">Mithil Girish</span>, a versatile 
-                    technology professional based in <span className="text-purple-400">Chennai, India</span>. I&apos;m 
-                    a passionate full-stack developer, graphic designer, photographer, and technology enthusiast who 
-                    bridges the gap between innovative design and cutting-edge development. 
-                    With expertise spanning web development, mobile applications, IoT systems, and digital design, 
-                    I craft experiences that are not only functional but truly engaging. My journey combines 
-                    technical precision with creative vision to deliver solutions that make a difference, from 
-                    AI-powered farm management apps to innovative web solutions using modern tech stacks.
+                  <p className="mb-6">
+                    Hello! I&apos;m <span className="text-white font-medium">Mithil Girish</span>, a versatile technology professional based in Chennai, India. I&apos;m a passionate <span className="text-blue-400">full-stack developer</span>, <span className="text-violet-400">graphic designer</span>, <span className="text-rose-400">photographer</span>, and technology enthusiast who bridges the gap between innovative design and cutting-edge development.
+                  </p>
+                  <p className="mb-6">
+                    With expertise spanning <span className="text-white">web development, mobile applications, IoT systems, and digital design</span>, I craft experiences that are not only functional but truly engaging. My journey combines technical precision with creative vision to deliver solutions that make a difference—from AI-powered farm management apps to innovative web solutions using modern tech stacks.
                   </p>
                   <p>
-                    Currently pursuing <span className="text-cyan-400">Bachelor of Technology in Data Science</span> at 
-                    VIT Chennai (2023-2027) while actively contributing to tech communities and building 
-                    impactful projects that solve real-world problems.
+                    Currently pursuing <span className="text-gray-200">Bachelor of Technology in Data Science</span> at VIT Chennai (2023-2027) while actively contributing to tech communities and building impactful projects that solve real-world problems.
                   </p>
-                </motion.p>
+                </motion.div>
               </div>
             </div>
           </Section>
 
           <Section id="skills">
-            <h2 className="text-4xl font-semibold mb-4">My Skills</h2>
-            <ul className="text-lg text-gray-300 mb-8 list-disc list-inside">
-              <li>Full Stack Web Development (React, Node.js, Django, Next.js)</li>
-              <li>Mobile App Development (React Native, Expo)</li>
-              <li>Backend Development (Express.js, Django Rest Framework)</li>
-              <li>UI/UX Design and Responsive Web Design</li>
-              <li>Graphic Design (Adobe Photoshop, UI Design)</li>
-              <li>Photography</li>
-              <li>Game Development (Unity, C#)</li>
-              <li>IoT & Hardware Integration (ESP32, Arduino)</li>
-            </ul>
+            <h2 className="text-4xl font-semibold mb-8 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent pb-2">Technical Arsenal</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-lg text-gray-300">
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Web Development</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>React.js, Next.js</li>
+                  <li>TypeScript, JavaScript</li>
+                  <li>Tailwind CSS, ShadCN/UI</li>
+                  <li>FastAPI, Django, Node.js</li>
+                </ul>
+              </div>
+
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Mobile Development</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>React Native, Expo</li>
+                  <li>Progressive Web Apps (PWA)</li>
+                  <li>Clerk Auth, Supabase</li>
+                </ul>
+              </div>
+
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Data & AI</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>Python (Data Science)</li>
+                  <li>Machine Learning, GenAI</li>
+                  <li>PostgreSQL, MongoDB, MySQL</li>
+                  <li>Supabase, Firebase</li>
+                </ul>
+              </div>
+
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Blockchain & Web3</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>Solidity, Smart Contracts</li>
+                  <li>Ethereum, DeFi Protocols</li>
+                </ul>
+              </div>
+
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Hardware & IoT</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>ESP32, Arduino</li>
+                  <li>Sensor Integration</li>
+                  <li>Embedded Systems</li>
+                </ul>
+              </div>
+
+              <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                <h3 className="text-2xl font-medium text-blue-400 mb-4">Creative</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>Adobe Photoshop, Figma</li>
+                  <li>UI/UX Design</li>
+                  <li>Professional Photography</li>
+                  <li>Unsplash Contributor</li>
+                </ul>
+              </div>
+            </div>
           </Section>
 
           <Section id="contact">
             <h2 className="text-4xl font-semibold mb-6">Connect with Me</h2>
-            <motion.div 
+            <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
