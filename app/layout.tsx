@@ -13,18 +13,18 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.mithilgirish.dev'),
-  
+
   title: 'Mithil Girish',
   description: 'Co-Founder @channelise, CSE (Data Science) Sophomore @ VIT Chennai, A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.',
-  
+
   keywords: 'Mithil Girish, Full Stack Developer, Web Development, Graphic Design, UI/UX, Game Development, React Developer, JavaScript Developer, Chennai Developer',
-  
+
   authors: [{ name: 'Mithil Girish', url: 'https://www.mithilgirish.dev' }],
-  
+
   icons: {
-    icon: '/favicon.ico', 
+    icon: '/favicon.ico',
   },
-  
+
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     description: 'A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development',
     siteName: 'Mithil Girish Portfolio',
   },
-  
+
   twitter: {
     card: 'summary',
     title: 'Mithil Girish - Full Stack Developer',
     description: 'A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development',
   },
-  
+
   robots: {
     index: true,
     follow: true,
@@ -69,7 +69,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={` min-h-screen text-white flex flex-col bg-black`}>
-        <Navbar/>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Mithil Girish',
+              url: 'https://www.mithilgirish.dev',
+              image: 'https://www.mithilgirish.dev/images/profile-pic.jpg', // Replace with actual profile image URL
+              sameAs: [
+                'https://github.com/mithilgirish',
+                'https://linkedin.com/in/mithilgirish',
+                'https://instagram.com/mithilgirish',
+                'https://unsplash.com/@mithilgirish',
+              ],
+              jobTitle: 'Full Stack Developer',
+              worksFor: {
+                '@type': 'Organization',
+                name: 'Channelise',
+              },
+            }),
+          }}
+        />
+        <Navbar />
 
         <main >
           {children}
@@ -78,13 +102,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <footer className="text-center py-4 pb-4 bg-gray-800 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg text-white z-20 p-2">
           {/* Glow effect */}
-  <div className="absolute inset-0 z-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-teal-400/10 blur-2xl opacity-30"></div>
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-teal-400/10 blur-2xl opacity-30"></div>
 
-  {/* Dotted background */}
-  <div className="absolute inset-0 z-0 bg-[radial-gradient(#ffffff1a_1px,transparent_1px)] bg-[length:10px_10px] opacity-40"></div>
+          {/* Dotted background */}
+          <div className="absolute inset-0 z-0 bg-[radial-gradient(#ffffff1a_1px,transparent_1px)] bg-[length:10px_10px] opacity-40"></div>
 
-  <p className="text-sm">© {new Date().getFullYear()} @mithilgirish</p>
-</footer>
+          <p className="text-sm">© {new Date().getFullYear()} @mithilgirish</p>
+        </footer>
 
       </body>
     </html>

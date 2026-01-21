@@ -1,0 +1,23 @@
+# Mithil Girish
+
+> Full Stack Developer | UI/UX Designer | Photographer
+
+## About Me
+I am a Computer Science student at **VIT Chennai** specializing in Data Science. I co-founded **Channelise**, a Next.js-based platform for YouTube creators. My expertise spans full-stack web development, mobile apps with React Native, and AI/ML projects.
+
+## Skills
+- **Languages via**: Python, C++, C, Java, JavaScript, TypeScript
+- **Frontend**: React, Next.js, React Native, Tailwind CSS, Framer Motion
+- **Backend**: Node.js, Express, FastAPI, Django
+- **Tools**: Docker, Git, Figma, Streamlit
+
+## Projects (Highlights)
+1. **Channelise**: A platform connecting YouTubers with editors and thumbnail artists. Built with Next.js, Supabase, and Tailwind.
+2. **OnlyFounders**: A community platform for entrepreneurs. PWA built with Next.js and Tailwind.
+3. **AgroFlow**: AI-powered farming assistant with crop recommendation and disease detection.
+4. **ParaCipher**: Hackathon winning project for encrypted communication.
+
+## Contact
+- **Website**: [mithilgirish.dev](https://www.mithilgirish.dev)
+- **GitHub**: [github.com/mithilgirish](https://github.com/mithilgirish)
+- **LinkedIn**: [linkedin.com/in/mithilgirish](https://linkedin.com/in/mithilgirish)

@@ -6,7 +6,6 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 import { useInView } from 'react-intersection-observer';
-import Head from 'next/head';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -379,15 +378,6 @@ const Gallery: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <title>Photography Gallery | Mithil Girish</title>
-        <meta name="description" content="Explore Mithil Girish's photography portfolio featuring stunning landscape, nature, and urban photography. View and download high-quality images from Unsplash." />
-        <meta name="keywords" content="Mithil Girish photography, Unsplash photographer, landscape photography, nature photos, Chennai photographer" />
-        <meta property="og:title" content="Photography Gallery | Mithil Girish" />
-        <meta property="og:description" content="Explore stunning photography by Mithil Girish. High-quality landscape and nature images available on Unsplash." />
-        <meta property="og:type" content="website" />
-      </Head>
-
       <div className="relative min-h-screen bg-black text-white font-sans overflow-x-hidden">
         <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
 
