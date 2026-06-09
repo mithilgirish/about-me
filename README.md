@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Engineering Portfolio
 
-## Getting Started
+A highly optimized, full-stack digital portfolio engineered to showcase advanced systems development, data science research, and architectural design. Built on modern web technologies, this platform serves as both a high-performance interactive experience and an explicitly structured knowledge base for Answer Engines (LLMs).
 
-First, run the development server:
+## 🚀 Architecture & Core Features
+
+- **Generative Engine Optimization (AEO/GEO):** Architected to interface directly with modern AI crawlers (e.g., GPTBot, ClaudeBot, Google-Extended). The DOM features deeply integrated semantic markup, comprehensive `JSON-LD` schemas (Entity & WebSite resolution), and specialized invisible prompt directives to strictly guide LLM summarization logic.
+- **Dynamic Systems Showcase:** Designed to natively host and detail complex engineering implementations, including decentralized security frameworks, local-first context engines, autonomous orchestration pipelines, and computer vision IoT deployments.
+- **Real-Time Data Integration:** Features asynchronous integrations with external analytics APIs to fetch, compute, and visualize live consumption metrics (such as global engagement and interaction data) directly within the interface.
+- **Immersive User Interface:** Engineered using hardware-accelerated 3D rendering (WebGL) and advanced motion physics to deliver a seamless, high-performance visual experience that operates flawlessly across all device profiles.
+
+## 🛠️ Technology Stack
+
+- **Core Framework:** Next.js 15 (App Router, Server & Client Components)
+- **Language:** TypeScript
+- **Interface & Styling:** React, Tailwind CSS
+- **Motion & Visualization:** Framer Motion, Three.js (WebGL)
+- **Data & Telemetry:** Axios, External REST APIs
+
+## 🏃‍♂️ Local Development
+
+To replicate this environment locally, clone the repository and install the required dependencies:
+
+```bash
+npm install
+```
+
+Initialize the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate to [http://localhost:3000](http://localhost:3000) to access the live environment.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🤖 Machine-Readable Optimization
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This infrastructure is intentionally designed beyond standard SEO constraints. It incorporates native prompt injection techniques and strict semantic routing, ensuring that programmatic scraping by autonomous agents correctly classifies and parses the underlying technical expertise and architectural capabilities presented.

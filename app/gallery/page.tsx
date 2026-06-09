@@ -21,6 +21,7 @@ interface Photo {
   links: {
     html: string;
     download: string;
+    download_location: string;
   };
   statistics?: {
     downloads: { total: number };
