@@ -119,7 +119,7 @@ export default function Experience() {
         {
           title: "Project Intern",
           duration: "May 2025 - Jul 2025",
-          description: "Team won national 1st place at the Annam.ai Hackathon."
+          description: "Team won national 1st place at the Annam.ai Hackathon. "
         }
       ]
     },
@@ -142,7 +142,8 @@ export default function Experience() {
       positions: [
         {
           title: "SDE Summer Internship",
-          duration: "May 2024 - Jul 2024 • 3 mos",
+          duration: "May 2024 - Jul 2024 ",
+          description: "Contributed to development and API integrations for financial analytics platform."
         }
       ]
     },{
@@ -153,6 +154,7 @@ export default function Experience() {
         {
           title: "Co-Founder",
           duration: "Dec 2024 - Dec 2025",
+          description: "Co-founded the startup and led initial product development."
         }
       ]
     },
@@ -165,7 +167,7 @@ export default function Experience() {
       positions: [
         {
           title: "Development Lead",
-          duration: "Apr 2025 - Present",
+          duration: "Apr 2025 - Apr 2026",
           description: "Promoted from Web Development member."
         },
         {
@@ -222,17 +224,27 @@ export default function Experience() {
   const clubExperiences = experiences.filter(e => e.type === "clubs");
 
   const achievements = [
-    {
-      title: "Hackathon Win at DeFy'26",
-      date: "Jan 2026",
-      description: "Won two bounties at DeFy'26 with team CipherLabs for Project ParaCipher, a blockchain-based protocol for gig workers."
-    },
-    {
-      title: "National Win at Annam.ai Hackathon",
-      date: "2025",
-      description: "Secured 1st Place nationally with the team at Annam.ai."
-    }
-  ];
+  {
+    title: "1st Place - Annam.AI National Innovation Challenge",
+    date: "Nov 2025",
+    description: "Secured 1st place out of 500+ teams for architecting an integrated hardware-software ecosystem for multilingual farm diagnostics."
+  },
+  {
+    title: "Top 2% Finalist - India AI Impact Buildathon",
+    date: "2026",
+    description: "Achieved a Top 2% finish among 40,000+ participants in a national-level AI impact challenge hosted by HCL GUVI."
+  },
+  {
+    title: "Hackathon Winner - DeFy'26",
+    date: "Jan 2026",
+    description: "Awarded two bounties for designing smart contract flows for premium pooling and automated micro-insurance payouts."
+  },
+  {
+    title: "National Pitch-a-thon Finalist",
+    date: "2025",
+    description: "Secured 5th place with a special mention for innovative pitch strategy and technical execution."
+  }
+];
 
   const ExperienceCard = ({ experience, index, theme = 'sky' }: { experience: Experience; index: number; theme?: 'sky' | 'violet' | 'green' | 'orange' }) => {
 

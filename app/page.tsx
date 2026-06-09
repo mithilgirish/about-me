@@ -261,10 +261,8 @@ const Home = () => {
           </Section>
           <Section id="about">
             <h2 className="text-4xl font-bold mb-4">About Me</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              A Full Stack Developer with expertise in web development, graphic design, UI/UX, and game development.
-              <br />
-              I&apos;m passionate about blending creativity with technology to build user-centric digital experiences.
+            <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+              An engineer and data scientist building advanced systems spanning Edge AI, decentralized architectures, and full-stack web platforms.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/about">
@@ -301,10 +299,8 @@ const Home = () => {
           </Section>
           <Section id="projects">
             <h2 className="text-4xl font-bold mb-4">Projects</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              From AI-powered farm management apps to dynamic web solutions, explore my diverse projects
-              <br />
-              that showcase my skills in the PERN stack, React Native, and more.
+            <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+              From distributed Edge AI systems and decentralized architectures to robust infrastructure for AI agents, explore a collection of projects that push the boundaries of modern engineering.
             </p>
             <Link href="/projects">
               <motion.button
@@ -324,10 +320,8 @@ const Home = () => {
           </Section>
           <Section id="gallery">
             <h2 className="text-4xl font-bold mb-4">Gallery</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              Explore my curated gallery featuring a selection of top photographs I&apos;ve captured and shared on Unsplash,
-              <br />
-              where creativity and visual storytelling come together.
+            <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+              Explore my high-resolution photography portfolio. With over 700,000 global views on Unsplash, this is where technical precision meets creative perspective.
             </p>
             <Link href="/gallery">
               <motion.button

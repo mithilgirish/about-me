@@ -22,6 +22,15 @@ interface Photo {
     html: string;
     download: string;
   };
+  statistics?: {
+    downloads: { total: number };
+    views: { total: number };
+  };
+}
+
+interface UserStats {
+  views: { total: number };
+  downloads: { total: number };
 }
 
 interface SectionProps {
@@ -121,9 +130,17 @@ const Lightbox: React.FC<{
 
           {/* Action buttons */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 rounded-b-lg flex justify-between items-center">
-            <p className="text-white/80 text-sm">
-              {photo.alt_description || 'Photography by Mithil Girish'}
-            </p>
+            <div className="flex flex-col">
+              <p className="text-white/80 text-sm">
+                {photo.alt_description || 'Photography by Mithil Girish'}
+              </p>
+              {photo.statistics && (
+                <div className="flex gap-4 mt-1 text-xs text-white/50">
+                  <span className="flex items-center gap-1">👁 {photo.statistics.views.total.toLocaleString()}</span>
+                  <span className="flex items-center gap-1">📥 {photo.statistics.downloads.total.toLocaleString()}</span>
+                </div>
+              )}
+            </div>
             <div className="flex gap-3">
               <a
                 href={photo.links.html}
@@ -139,10 +156,19 @@ const Lightbox: React.FC<{
               </a>
               <a
                 href={`${photo.links.download}?force=true`}
-                target="_blank"
-                rel="noopener noreferrer"
+                download={`${photo.id}.jpg`}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all text-sm"
-                onClick={(e) => e.stopPropagation()}
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  try {
+                    // Track the download per Unsplash API guidelines
+                    await axios.get(photo.links.download_location, {
+                      headers: { Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}` }
+                    });
+                  } catch (err) {
+                    // Silent fail for tracking
+                  }
+                }}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -159,6 +185,7 @@ const Lightbox: React.FC<{
 
 const Gallery: React.FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -176,6 +203,7 @@ const Gallery: React.FC = () => {
           page: page,
           per_page: ITEMS_PER_PAGE,
           order_by: 'views',
+          stats: true,
         },
         headers: {
           Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
@@ -191,6 +219,22 @@ const Gallery: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        const res = await axios.get(`https://api.unsplash.com/users/mithilgirish/statistics`, {
+          headers: {
+            Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
+          },
+        });
+        setUserStats(res.data);
+      } catch (error) {
+        console.error("Error fetching user stats:", error);
+      }
+    };
+    fetchUserStats();
   }, []);
 
   useEffect(() => {
@@ -401,13 +445,30 @@ const Gallery: React.FC = () => {
             <div className="max-w-screen-xl mx-auto p-6" ref={scrollRef}>
               <Section id="gallery-intro">
                 <motion.h1
-                  className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+                  className="text-5xl md:text-7xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1 }}
                 >
                   Gallery
                 </motion.h1>
+                {userStats && (
+                  <motion.div 
+                    className="flex gap-8 mt-2 text-gray-400 font-light"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 1 }}
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-2xl text-white font-semibold">{userStats.views.total.toLocaleString()}</span>
+                      <span className="text-xs uppercase tracking-wider">Total Views</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-2xl text-white font-semibold">{userStats.downloads.total.toLocaleString()}</span>
+                      <span className="text-xs uppercase tracking-wider">Total Downloads</span>
+                    </div>
+                  </motion.div>
+                )}
               </Section>
 
               <Section id="photo-grid">
@@ -431,8 +492,14 @@ const Gallery: React.FC = () => {
                             className="object-cover w-full transition-all duration-300"
                           />
                           {/* Hover overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                            <span className="text-white text-sm font-light">Click to preview & download</span>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                            <span className="text-white text-sm font-light mb-1">Click to preview & download</span>
+                            {photo.statistics && (
+                              <div className="flex gap-3 text-xs text-white/70">
+                                <span>👁 {photo.statistics.views.total.toLocaleString()}</span>
+                                <span>📥 {photo.statistics.downloads.total.toLocaleString()}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </motion.div>

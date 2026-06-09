@@ -166,8 +166,8 @@ const About: React.FC = () => {
                   <p className="mb-6">
                     Hello! I&apos;m <span className="text-white font-medium">Mithil Girish</span>, a versatile technology professional based in Chennai, India. I&apos;m a passionate <span className="text-blue-400">full-stack developer</span>, <span className="text-violet-400">graphic designer</span>, <span className="text-rose-400">photographer</span>, and technology enthusiast who bridges the gap between innovative design and cutting-edge development.
                   </p>
-                  <p className="mb-6">
-                    With expertise spanning <span className="text-white">web development, mobile applications, IoT systems, and digital design</span>, I craft experiences that are not only functional but truly engaging. My journey combines technical precision with creative vision to deliver solutions that make a difference—from AI-powered farm management apps to innovative web solutions using modern tech stacks.
+                  <p className="mb-6 leading-relaxed text-gray-300">
+                    With expertise spanning <span className="text-white font-medium">Edge AI, decentralized systems, AI context architectures, and full-stack development</span>, I craft experiences that are not only functional but highly scalable. My journey combines technical precision with deep architectural vision to deliver solutions that push the boundaries of modern engineering—from robust infrastructure for autonomous agents to secure, local-first IoT workflows.
                   </p>
                   <p>
                     Currently pursuing <span className="text-gray-200">Bachelor of Technology in Data Science</span> at VIT Chennai (2023-2027) while actively contributing to tech communities and building impactful projects that solve real-world problems.
