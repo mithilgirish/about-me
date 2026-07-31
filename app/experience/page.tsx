@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import * as THREE from "three";
 import { Calendar } from "lucide-react";
@@ -8,6 +8,8 @@ import { Calendar } from "lucide-react";
 interface SectionProps {
   children: React.ReactNode;
   id: string;
+  indexCode?: string;
+  sectionLabel?: string;
 }
 
 interface Experience {
@@ -21,7 +23,7 @@ interface Experience {
   type: "clubs" | "experience";
 }
 
-const Section: React.FC<SectionProps> = ({ children, id }) => {
+const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -31,18 +33,30 @@ const Section: React.FC<SectionProps> = ({ children, id }) => {
     <motion.section
       id={id}
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.5 }}
-      className="mb-20"
+      initial={{ opacity: 0, y: 35 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 35 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="mb-16"
     >
+      {indexCode && (
+        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-6 font-mono text-xs text-white/50">
+          <div className="flex items-center space-x-2">
+            <span className="text-white/90 font-semibold">{indexCode}</span>
+            <span className="text-white/20">//</span>
+            <span className="text-white/90 font-medium tracking-wide uppercase">{sectionLabel}</span>
+          </div>
+          <span className="text-[10px] text-white/30 hidden sm:inline">[ TELEMETRY // LOGS ]</span>
+        </div>
+      )}
       {children}
     </motion.section>
   );
 };
 
-export default function Experience() {
+export default function ExperiencePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { scrollY } = useScroll();
+  const smoothScrollY = useSpring(scrollY, { stiffness: 70, damping: 22 });
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -51,66 +65,58 @@ export default function Experience() {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const starsGeometry = new THREE.BufferGeometry();
-    const starCount = 1500;
+    const starCount = 1200;
     const positionArray = new Float32Array(starCount * 3);
-    const sizes = new Float32Array(starCount);
 
     for (let i = 0; i < starCount * 3; i++) {
       positionArray[i] = (Math.random() - 0.5) * 2000;
     }
-    for (let i = 0; i < starCount; i++) {
-      sizes[i] = Math.random() * 2 + 0.5;
-    }
 
     starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
-    starsGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-    // Monochrome / White Stars
-    const colors = new Float32Array(starCount * 3);
-    colors.fill(1.0); // White
-    starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
     const starsMaterial = new THREE.PointsMaterial({
       size: 1.5,
       color: 0xffffff,
       transparent: true,
-      opacity: 0.8,
-      vertexColors: false // Use single color
+      opacity: 0.75,
     });
 
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
     camera.position.z = 10;
 
+    let animationFrameId: number;
+
     const animate = () => {
-      requestAnimationFrame(animate);
-      stars.rotation.y += 0.0002;
+      animationFrameId = requestAnimationFrame(animate);
+      stars.rotation.y = smoothScrollY.get() * 0.0004 + 0.0002;
       stars.rotation.x += 0.0001;
       renderer.render(scene, camera);
     };
+
     animate();
 
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     };
+
     window.addEventListener('resize', handleResize);
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       starsGeometry.dispose();
       starsMaterial.dispose();
     };
-  }, []);
+  }, [smoothScrollY]);
 
   const experiences: Experience[] = [
-    // Internship/Work Experiences
-    
     {
       organization: "ANNAM.AI",
       logo: "annamai.png",
@@ -119,7 +125,7 @@ export default function Experience() {
         {
           title: "Project Intern",
           duration: "May 2025 - Jul 2025",
-          description: "Team won national 1st place at the Annam.ai Hackathon. "
+          description: "Team won national 1st place at the Annam.ai Hackathon."
         }
       ]
     },
@@ -142,11 +148,12 @@ export default function Experience() {
       positions: [
         {
           title: "SDE Summer Internship",
-          duration: "May 2024 - Jul 2024 ",
+          duration: "May 2024 - Jul 2024",
           description: "Contributed to development and API integrations for financial analytics platform."
         }
       ]
-    },{
+    },
+    {
       organization: "Channelise",
       logo: "channelise.png",
       type: "experience",
@@ -158,8 +165,6 @@ export default function Experience() {
         }
       ]
     },
-
-    // Club Experiences
     {
       organization: "Microsoft Innovations Club (MIC) VITC",
       logo: "mic.png",
@@ -224,31 +229,29 @@ export default function Experience() {
   const clubExperiences = experiences.filter(e => e.type === "clubs");
 
   const achievements = [
-  {
-    title: "1st Place - Annam.AI National Innovation Challenge",
-    date: "Nov 2025",
-    description: "Secured 1st place out of 500+ teams for architecting an integrated hardware-software ecosystem for multilingual farm diagnostics."
-  },
-  {
-    title: "Top 2% Finalist - India AI Impact Buildathon",
-    date: "2026",
-    description: "Achieved a Top 2% finish among 40,000+ participants in a national-level AI impact challenge hosted by HCL GUVI."
-  },
-  {
-    title: "Hackathon Winner - DeFy'26",
-    date: "Jan 2026",
-    description: "Awarded two bounties for designing smart contract flows for premium pooling and automated micro-insurance payouts."
-  },
-  {
-    title: "National Pitch-a-thon Finalist",
-    date: "2025",
-    description: "Secured 5th place with a special mention for innovative pitch strategy and technical execution."
-  }
-];
+    {
+      title: "1st Place - Annam.AI National Innovation Challenge",
+      date: "Nov 2025",
+      description: "Secured 1st place out of 500+ teams for architecting an integrated hardware-software ecosystem for multilingual farm diagnostics."
+    },
+    {
+      title: "Top 2% Finalist - India AI Impact Buildathon",
+      date: "2026",
+      description: "Achieved a Top 2% finish among 40,000+ participants in a national-level AI impact challenge hosted by HCL GUVI."
+    },
+    {
+      title: "Hackathon Winner - DeFy'26",
+      date: "Jan 2026",
+      description: "Awarded two bounties for designing smart contract flows for premium pooling and automated micro-insurance payouts."
+    },
+    {
+      title: "National Pitch-a-thon Finalist",
+      date: "2025",
+      description: "Secured 5th place with a special mention for innovative pitch strategy and technical execution."
+    }
+  ];
 
   const ExperienceCard = ({ experience, index, theme = 'sky' }: { experience: Experience; index: number; theme?: 'sky' | 'violet' | 'green' | 'orange' }) => {
-
-    // Theme-based colors (Bolder & Classier)
     const themeStyles = {
       sky: {
         wrapper: 'hover:border-sky-500/60 hover:bg-sky-500/5',
@@ -280,44 +283,51 @@ export default function Experience() {
 
     return (
       <motion.div
-        className={`group bg-zinc-900/50 backdrop-blur-md p-6 rounded-xl shadow-2xl border border-zinc-800 transition-all duration-300 hover:shadow-2xl hover:scale-105 ${currentTheme.wrapper}`}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        whileHover={{ y: -5 }}
+        className={`group bg-zinc-900/60 backdrop-blur-md p-6 rounded-xl border border-zinc-800 transition-all duration-300 ${currentTheme.wrapper} relative overflow-hidden`}
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: index * 0.08 }}
+        whileHover={{ y: -4, scale: 1.02 }}
       >
+        {/* Micrographics Header Pill */}
+        <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-3 pb-2 border-b border-zinc-800">
+          <span>SPEC // EXP_0{index + 1}</span>
+          <span className="micro-tag text-[9px] uppercase">{experience.type}</span>
+        </div>
+
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 ">
+            <div className="w-10 h-10 flex-shrink-0">
               <img
                 src={`/logos/${experience.logo}`}
                 alt={`${experience.organization} logo`}
-                width={100}
-                height={100}
-                className="rounded-sm transition-all duration-300" // Removed grayscale
+                width={80}
+                height={80}
+                className="rounded-sm transition-transform duration-300 group-hover:scale-105"
                 onError={(e) => {
-                  e.currentTarget.src = "https://via.placeholder.com/100?text=" + experience.organization.charAt(0);
+                  e.currentTarget.src = "https://via.placeholder.com/80?text=" + experience.organization.charAt(0);
                 }}
               />
             </div>
-            <h2 className={`text-xl font-semibold ${currentTheme.text} transition-colors`}>
+            <h3 className={`text-lg font-semibold ${currentTheme.text} transition-colors font-sans`}>
               {experience.organization}
-            </h2>
+            </h3>
           </div>
         </div>
 
         <div className="space-y-3">
           {experience.positions.map((position, posIndex) => (
-            <div key={posIndex} className={`border-l-2 pl-4 ${currentTheme.leftBorder} transition-colors duration-300`}>
-              <h3 className="text-lg font-semibold text-white mb-1">
+            <div key={posIndex} className={`border-l-2 pl-3.5 ${currentTheme.leftBorder} transition-colors duration-300`}>
+              <h4 className="text-base font-semibold text-white mb-0.5">
                 {position.title}
-              </h3>
-              <div className={`flex items-center gap-2 text-sm mb-2 ${currentTheme.subText}`}>
-                <Calendar size={12} className={currentTheme.subText} />
+              </h4>
+              <div className={`flex items-center gap-1.5 text-xs mb-1.5 font-mono ${currentTheme.subText}`}>
+                <Calendar size={11} className={currentTheme.subText} />
                 <span>{position.duration}</span>
               </div>
               {position.description && (
-                <p className="text-gray-400 text-sm leading-relaxed font-light">{position.description}</p>
+                <p className="text-gray-400 text-xs leading-relaxed font-light">{position.description}</p>
               )}
             </div>
           ))}
@@ -327,35 +337,37 @@ export default function Experience() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
-      {/* ... canvas ... */}
-      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
+    <div className="relative min-h-screen text-white font-sans overflow-x-hidden selection:bg-white selection:text-black">
+      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none" />
 
       <main className="relative z-10">
-        <div className="container mx-auto px-4 py-20">
-          <Section id="experience-intro">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl">
+          
+          {/* INTRO HERO */}
+          <Section id="experience-intro" indexCode="01" sectionLabel="Professional Track Record">
             <motion.h1
-              className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
-              initial={{ opacity: 0, y: 50 }}
+              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 0.8 }}
             >
               My Experience
             </motion.h1>
+
             <motion.p
-              className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl leading-relaxed"
-              initial={{ opacity: 0, y: 50 }}
+              className="text-lg md:text-xl text-gray-300 max-w-3xl leading-relaxed font-light"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
               Explore my journey through leadership roles, technical contributions,
-              and professional growth across clubs, organizations, and experience.
+              and professional growth across startups, research institutes, and engineering teams.
             </motion.p>
           </Section>
 
-          {/* Experience Section */}
-          <Section id="experience">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {/* INTERNSHIPS & WORK EXPERIENCE */}
+          <Section id="experience" indexCode="02" sectionLabel="Engineering & Internships">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {internshipExperiences.map((experience, index) => {
                 let theme: 'sky' | 'violet' | 'green' | 'orange' = 'sky';
                 if (experience.organization.includes("Channelise")) theme = 'violet';
@@ -374,26 +386,28 @@ export default function Experience() {
             </div>
           </Section>
 
-          {/* Club Experiences Section */}
-          <Section id="club-experiences">
+          {/* CLUB LEADERSHIP WORK */}
+          <Section id="club-experiences" indexCode="03" sectionLabel="Club Leadership & Teams">
             <motion.h2
-              className="text-4xl md:text-5xl font-bold mb-8 text-white"
-              initial={{ opacity: 0, x: -50 }}
+              className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               Club Work
             </motion.h2>
+
             <motion.p
-              className="text-lg text-gray-300 mb-8 max-w-3xl"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-sm md:text-base text-gray-300 mb-8 max-w-2xl font-light"
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Leadership roles and technical contributions across various student organizations
+              Leadership roles and technical contributions across student organizations
               and programming clubs at VIT Chennai.
             </motion.p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {clubExperiences.map((experience, index) => (
                 <ExperienceCard
                   key={`club-${index}`}
@@ -405,36 +419,49 @@ export default function Experience() {
             </div>
           </Section>
 
-          {/* Achievements Section */}
-          <Section id="achievements">
+          {/* ACHIEVEMENTS & HONORS */}
+          <Section id="achievements" indexCode="04" sectionLabel="Honors & Achievements">
             <motion.h2
-              className="text-4xl md:text-5xl font-bold mb-8 text-white"
-              initial={{ opacity: 0, x: -50 }}
+              className="text-3xl md:text-4xl font-bold mb-6 text-white tracking-tight"
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               Achievements
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {achievements.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="bg-zinc-900/50 backdrop-blur-md p-6 rounded-xl border border-zinc-700/50 hover:border-amber-500/60 hover:bg-amber-500/5 transition-all duration-300 hover:shadow-2xl group"
+                  className="bg-zinc-900/60 backdrop-blur-md p-6 rounded-xl border border-zinc-800 hover:border-amber-500/60 hover:bg-amber-500/5 transition-all duration-300 group relative overflow-hidden"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -3, scale: 1.01 }}
                 >
-                  <h3 className="text-2xl font-bold text-amber-100 group-hover:text-amber-300 transition-colors mb-2">{item.title}</h3>
-                  <div className="text-amber-500 text-sm mb-3 flex items-center gap-2 font-medium">
-                    <Calendar size={14} /> {item.date}
+                  <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-2 pb-1.5 border-b border-zinc-800">
+                    <span>HONOR_0{index + 1}</span>
+                    <span className="micro-tag text-[9px]">NATIONAL</span>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed font-light group-hover:text-gray-300 transition-colors">
+
+                  <h3 className="text-xl font-bold text-amber-100 group-hover:text-amber-300 transition-colors mb-2">
+                    {item.title}
+                  </h3>
+
+                  <div className="text-amber-400 text-xs mb-3 flex items-center gap-1.5 font-mono">
+                    <Calendar size={12} /> {item.date}
+                  </div>
+
+                  <p className="text-gray-400 text-xs leading-relaxed font-light group-hover:text-gray-300 transition-colors">
                     {item.description}
                   </p>
                 </motion.div>
               ))}
             </div>
           </Section>
+
         </div>
       </main>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import * as THREE from "three";
 import Link from "next/link";
@@ -8,35 +8,46 @@ import Link from "next/link";
 interface SectionProps {
   children: React.ReactNode;
   id: string;
+  indexCode?: string;
+  sectionLabel?: string;
 }
 
 interface Project {
   title: string;
   description: string;
   github?: string;
-  liveLink?: string; // Optional deployed link
+  liveLink?: string;
   tech: string[];
-  type: "personal" | "work" | "research"; // Distinguish between projects
-  organization?: string; // For work projects
+  type: "personal" | "work" | "research";
+  organization?: string;
   theme?: "sky" | "violet" | "orange" | "rose";
 }
 
-const Section: React.FC<SectionProps> = ({ children, id }) => {
+const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
-
   });
 
   return (
     <motion.section
       id={id}
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.5 }}
-      className="mb-20"
+      initial={{ opacity: 0, y: 35 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 35 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="mb-16"
     >
+      {indexCode && (
+        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-6 font-mono text-xs text-white/50">
+          <div className="flex items-center space-x-2">
+            <span className="text-white/90 font-semibold">{indexCode}</span>
+            <span className="text-white/20">//</span>
+            <span className="text-white/90 font-medium tracking-wide uppercase">{sectionLabel}</span>
+          </div>
+          <span className="text-[10px] text-white/30 hidden sm:inline">[ REPOSITORY // MATRIX ]</span>
+        </div>
+      )}
       {children}
     </motion.section>
   );
@@ -44,6 +55,8 @@ const Section: React.FC<SectionProps> = ({ children, id }) => {
 
 export default function Projects() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { scrollY } = useScroll();
+  const smoothScrollY = useSpring(scrollY, { stiffness: 70, damping: 22 });
 
   const projects: Project[] = [
     // Personal Projects
@@ -98,8 +111,7 @@ export default function Projects() {
     },
     {
       title: "Crop-Core_Tech",
-      description:
-        "A comprehensive crop yield prediction application leveraging machine learning algorithms, with seamless API integration and real-time state rainfall data analysis.",
+      description: "A comprehensive crop yield prediction application leveraging machine learning algorithms, with seamless API integration and real-time state rainfall data analysis.",
       github: "https://github.com/mithilgirish/Crop-Core_Tech",
       tech: ["Python", "Machine Learning", "API", "Data Analysis"],
       type: "personal",
@@ -107,8 +119,7 @@ export default function Projects() {
     },
     {
       title: "Agroflow",
-      description:
-        "A smart agriculture platform designed to improve farming efficiency using modern technology like IoT-based monitoring, AI-powered insights, and secure digital traceability. The goal is to help farmers track field conditions in real time, automate decision-making, and build trust in the crop lifecycle using a verified system.",
+      description: "A smart agriculture platform designed to improve farming efficiency using modern technology like IoT-based monitoring, AI-powered insights, and secure digital traceability.",
       github: "https://github.com/mithilgirish/Agroflow",
       tech: ["IoT", "AI", "AgriTech", "Next.js"],
       type: "personal",
@@ -116,8 +127,7 @@ export default function Projects() {
     },
     {
       title: "Reminisce",
-      description:
-        "A comprehensive ecosystem supporting early-stage Alzheimer's patients through AI-powered face recognition, real-time safety monitoring, and intuitive interfaces—empowering independence while providing caregiver peace of mind.",
+      description: "A comprehensive ecosystem supporting early-stage Alzheimer's patients through AI-powered face recognition, real-time safety monitoring, and intuitive interfaces.",
       github: "https://github.com/mithilgirish/reminisce",
       tech: ["Next.js", "React", "AI/ML", "Healthcare"],
       type: "personal",
@@ -125,8 +135,7 @@ export default function Projects() {
     },
     {
       title: "ParaCipher",
-      description:
-        "A blockchain-based micro-insurance protocol designed for gig workers. Won two bounties at DeFy'26 with team CipherLabs.",
+      description: "A blockchain-based micro-insurance protocol designed for gig workers. Won two bounties at DeFy'26 with team CipherLabs.",
       github: "https://github.com/mithilgirish/ParaCipher",
       tech: ["Blockchain", "Solidity", "Web3", "React"],
       type: "personal",
@@ -134,8 +143,7 @@ export default function Projects() {
     },
     {
       title: "CareerTrack",
-      description:
-        "The Smartest Way to Learn, Prepare & Succeed! An AI-powered career guidance platform.",
+      description: "The Smartest Way to Learn, Prepare & Succeed! An AI-powered career guidance platform.",
       github: "https://github.com/mithilgirish/careertrack",
       liveLink: "https://careertrack-one.vercel.app",
       tech: ["Next.js", "FastAPI", "Generative AI", "Supabase"],
@@ -144,8 +152,7 @@ export default function Projects() {
     },
     {
       title: "Obscura",
-      description:
-        "Obscura is a sleek, full-stack app to track your personal book collection. Securely add, edit, and manage books with notes—each tied to your account.",
+      description: "Obscura is a sleek, full-stack app to track your personal book collection. Securely add, edit, and manage books with notes—each tied to your account.",
       github: "https://github.com/mithilgirish/obscura",
       liveLink: "https://obscura.mithilgirish.dev/",
       tech: ["Next.js", "TypeScript", "MongoDB", "Clerk"],
@@ -154,8 +161,7 @@ export default function Projects() {
     },
     {
       title: "Pill-Dispenser",
-      description:
-        "An intelligent pill dispenser system with React-based control interface, integrated with ESP32 microcontroller and precision servo motors for automated medication management.",
+      description: "An intelligent pill dispenser system with React-based control interface, integrated with ESP32 microcontroller and precision servo motors for automated medication management.",
       github: "https://github.com/mithilgirish/Pill-Dispenser",
       tech: ["React", "ESP32", "IoT", "Hardware"],
       type: "personal",
@@ -163,8 +169,7 @@ export default function Projects() {
     },
     {
       title: "Treximo",
-      description:
-        "An engaging interactive game built with Pygame, featuring unique gameplay mechanics and immersive user experience with custom graphics and sound effects.",
+      description: "An engaging interactive game built with Pygame, featuring unique gameplay mechanics and immersive user experience with custom graphics and sound effects.",
       github: "https://github.com/mithilgirish/Treximo",
       tech: ["Python", "Pygame", "Game Development"],
       type: "personal",
@@ -172,8 +177,7 @@ export default function Projects() {
     },
     {
       title: "Music-Player",
-      description:
-        "A feature-rich Python music player application with intuitive UI, playlist management, audio visualization, and support for multiple audio formats.",
+      description: "A feature-rich Python music player application with intuitive UI, playlist management, audio visualization, and support for multiple audio formats.",
       github: "https://github.com/mithilgirish/Music-Player",
       tech: ["Python", "Tkinter", "Audio Processing"],
       type: "personal",
@@ -181,18 +185,15 @@ export default function Projects() {
     },
     {
       title: "FitFusion",
-      description:
-        "An AI-powered fitness and health monitoring mobile app built with React Native.",
+      description: "An AI-powered fitness and health monitoring mobile app built with React Native.",
       github: "https://github.com/mithilgirish/FitFusion",
       tech: ["React Native", "HealthConnect", "GenAI", "Clerk"],
       type: "personal",
       theme: "rose"
     },
-
     {
       title: "InstaCut",
-      description:
-        "InstaCut is a sleek AI-powered web app that instantly removes image backgrounds. Built with Vite, Tailwind, and ShadCN/UI",
+      description: "InstaCut is a sleek AI-powered web app that instantly removes image backgrounds. Built with Vite, Tailwind, and ShadCN/UI.",
       github: "https://github.com/mithilgirish/InstaCut",
       liveLink: "https://instacut.mithilgirish.dev/",
       tech: ["React", "Tailwind", "ShadCN/UI", "Vite"],
@@ -201,20 +202,17 @@ export default function Projects() {
     },
     {
       title: "Mouse Run",
-      description:
-        "Mouse Run is a fast-paced Pygame arcade game where a mouse dodges trains and grabs cheese to score.",
+      description: "Mouse Run is a fast-paced Pygame arcade game where a mouse dodges trains and grabs cheese to score.",
       github: "https://github.com/mithilgirish/Mouse-Run",
       tech: ["Python", "Pygame", "Game Development"],
       type: "personal",
       theme: "sky"
     },
 
-
     // Work/Club Projects 
     {
       title: "OSPC Club Website",
-      description:
-        "Led the complete development of the OSPC's website, implementing modern UI/UX principles and responsive design.",
+      description: "Led the complete development of the OSPC's website, implementing modern UI/UX principles and responsive design.",
       github: "https://github.com/OSPC-VITC/ospc-website",
       liveLink: "https://ospcvitc.club",
       tech: ["Next.js", "Tailwind CSS", "Particles.js"],
@@ -224,8 +222,7 @@ export default function Projects() {
     },
     {
       title: "Treasure Hunt PWA",
-      description:
-        "Cyberpunk-themed digital treasure hunt with QR scanning, GPS challenges. Built with Next.js for an interactive puzzle-solving experience with futuristic dashboard and ambient soundscapes.",
+      description: "Cyberpunk-themed digital treasure hunt with QR scanning, GPS challenges. Built with Next.js for an interactive puzzle-solving experience.",
       github: "https://github.com/OSPC-VITC/treasure-hunt-website",
       tech: ["Next.js", "Supabase", "PWA", "Clerk"],
       liveLink: "https://www.treasurehunt.ospcvitc.club/",
@@ -235,8 +232,7 @@ export default function Projects() {
     },
     {
       title: "IPL Battle",
-      description:
-        "IPL-Battle is a fantasy cricket game where users can create teams, join leagues, and compete based on real IPL match statistics. It features a user-friendly interface, real-time updates, and a robust backend.",
+      description: "IPL-Battle is a fantasy cricket game where users can create teams, join leagues, and compete based on real IPL match statistics.",
       github: "https://github.com/ecell-vitc/IPL-Battle",
       liveLink: "https://ipl-battle.vercel.app/",
       tech: ["vite", "Django", "React", "Tailwind CSS"],
@@ -246,8 +242,7 @@ export default function Projects() {
     },
     {
       title: "MIC Official Website",
-      description:
-        "Official website for the Microsoft Innovation Club at VIT Chennai. Discover events, hackathons, and opportunities to innovate with a futuristic design.",
+      description: "Official website for the Microsoft Innovation Club at VIT Chennai. Discover events, hackathons, and opportunities to innovate with a futuristic design.",
       github: "https://github.com/mithilgirish/mic-official-website-25",
       liveLink: "https://www.microsoftinnovations.club/",
       tech: ["Next.js", "Tailwind CSS", "React"],
@@ -257,8 +252,7 @@ export default function Projects() {
     },
     {
       title: "OnlyFounders PWA",
-      description:
-        "The one-of-a-kind hackathon platform for student founders. A mobile-first PWA providing exclusive access to startup events and networking.",
+      description: "The one-of-a-kind hackathon platform for student founders. A mobile-first PWA providing exclusive access to startup events and networking.",
       liveLink: "https://app.onlyfounders.in/",
       github: "https://github.com/mithilgirish/onlyfounder-pwa",
       tech: ["Next.js", "PWA", "Supabase", "Tailwind"],
@@ -268,8 +262,7 @@ export default function Projects() {
     },
     {
       title: "VOID App",
-      description:
-        "VOID:v1 - A futuristic tech event PWA for OSPC's flagship hackathon. Features real-time session tracking and an immersive dark theme experience.",
+      description: "VOID:v1 - A futuristic tech event PWA for OSPC's flagship hackathon. Features real-time session tracking and an immersive dark theme experience.",
       github: "https://github.com/mithilgirish/void_app",
       liveLink: "https://app.void25.site/",
       tech: ["Next.js", "PWA", "Supabase", "Clerk"],
@@ -277,7 +270,8 @@ export default function Projects() {
       organization: "Open Source Programming Club VITC",
       theme: "rose"
     },
-    // --- RESEARCH / VENTURES ---
+
+    // Research / Ventures
     {
       title: "PACTUS",
       description: "A Decentralized 'Immune System' for the Agentic Web defending against malicious autonomous AI agents through Polymorphic Adversarial Traps and Blockchain Consensus.",
@@ -300,95 +294,103 @@ export default function Projects() {
   const workProjects = projects.filter(p => p.type === "work");
   const researchProjects = projects.filter(p => p.type === "research");
 
-
   const themeMap = {
     sky: {
       border: "hover:border-sky-500/40",
       bgHover: "hover:bg-sky-500/5",
-      text: "text-sky-400",
+      text: "text-sky-300",
     },
     violet: {
       border: "hover:border-violet-500/40",
       bgHover: "hover:bg-violet-500/5",
-      text: "text-violet-400",
+      text: "text-violet-300",
     },
     orange: {
       border: "hover:border-orange-500/40",
       bgHover: "hover:bg-orange-500/5",
-      text: "text-orange-400",
+      text: "text-orange-300",
     },
     rose: {
       border: "hover:border-rose-500/40",
       bgHover: "hover:bg-rose-500/5",
-      text: "text-rose-400",
+      text: "text-rose-300",
     },
     default: {
       border: "hover:border-blue-500/40",
       bgHover: "hover:bg-blue-500/5",
-      text: "text-blue-400",
+      text: "text-blue-300",
     }
   };
 
   const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
     const t = project.theme && themeMap[project.theme] ? themeMap[project.theme] : themeMap.default;
-    
+
     return (
       <motion.div
-        className={`group bg-zinc-900/50 backdrop-blur-md p-6 rounded-xl shadow-2xl border border-zinc-800 transition-all duration-300 ${t.border} ${t.bgHover} hover:scale-105`}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        whileHover={{ y: -5 }}
+        className={`group bg-zinc-900/60 backdrop-blur-md p-6 rounded-xl border border-zinc-800 transition-all duration-300 ${t.border} ${t.bgHover} relative overflow-hidden flex flex-col justify-between`}
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: index * 0.06 }}
+        whileHover={{ y: -4, scale: 1.02 }}
       >
-        <div className="flex justify-between items-start mb-4">
-          <h2 className={`text-2xl font-semibold transition-colors ${t.text}`}>
-            {project.title}
-          </h2>
-          <div className="flex flex-col items-end gap-2">
+        <div>
+          {/* Micrographics Header Pill */}
+          <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-3 pb-2 border-b border-zinc-800">
+            <span>MOD // PROJ_0{index + 1}</span>
+            <span className="micro-tag text-[9px] uppercase">{project.type}</span>
+          </div>
+
+          <div className="flex justify-between items-start mb-3">
+            <h3 className={`text-xl font-bold transition-colors ${t.text} font-sans`}>
+              {project.title}
+            </h3>
             {project.organization && (
-              <span className="px-2 py-1 text-xs bg-zinc-800 text-violet-200 rounded-full border border-violet-900/50 text-right">
+              <span className="px-2 py-0.5 text-[10px] bg-zinc-800/80 text-violet-300 rounded border border-violet-900/40 font-mono text-right ml-2 flex-shrink-0">
                 {project.organization}
               </span>
             )}
           </div>
+
+          <p className="text-gray-400 mb-4 text-xs leading-relaxed font-light line-clamp-3">
+            {project.description}
+          </p>
         </div>
 
-        <p className="text-gray-400 mb-4 leading-relaxed font-light line-clamp-3">
-          {project.description}
-        </p>
+        <div>
+          <div className="flex flex-wrap gap-1.5 mb-4 font-mono text-[11px]">
+            {project.tech.map((tech, techIndex) => (
+              <span
+                key={techIndex}
+                className="px-2.5 py-0.5 text-[10px] bg-zinc-800/80 text-gray-300 rounded border border-zinc-700/60"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
 
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech.map((tech, techIndex) => (
-            <span
-              key={techIndex}
-              className="px-3 py-1 text-xs bg-zinc-800/80 text-gray-300 rounded-full border border-zinc-700"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex gap-3 mt-4">
-          {project.github && (
-            <Link href={project.github} target="_blank" rel="noopener noreferrer">
-              <button className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-gray-300 hover:text-white rounded-lg transition-all duration-200 text-sm border border-zinc-700">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-                GitHub
-              </button>
-            </Link>
-          )}
-          {project.liveLink && (
-            <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">
-              <button className={`flex items-center gap-2 px-4 py-2 hover:text-white rounded-lg transition-all duration-200 text-sm border ${t.border} ${t.bgHover} text-gray-300`}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Live Demo
-              </button>
-            </Link>
-          )}
+          <div className="flex gap-2 font-mono text-xs pt-2 border-t border-zinc-800/80">
+            {project.github && (
+              <Link href={project.github} target="_blank" rel="noopener noreferrer">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-gray-300 hover:text-white rounded transition-all text-xs border border-zinc-700">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  GitHub
+                </button>
+              </Link>
+            )}
+            {project.liveLink && (
+              <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                <button className={`flex items-center gap-1.5 px-3 py-1.5 hover:text-white rounded transition-all text-xs border ${t.border} ${t.bgHover} text-gray-300`}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Live Demo
+                </button>
+              </Link>
+            )}
+          </div>
         </div>
       </motion.div>
     );
@@ -398,96 +400,37 @@ export default function Projects() {
     if (!canvasRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      alpha: true,
-      antialias: true
-    });
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Create enhanced stars geometry
     const starsGeometry = new THREE.BufferGeometry();
-    const starCount = 2000;
+    const starCount = 1500;
     const positionArray = new Float32Array(starCount * 3);
-    const sizes = new Float32Array(starCount);
 
-    for (let i = 0; i < starCount; i++) {
-      positionArray[i * 3] = (Math.random() - 0.5) * 2000;
-      positionArray[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-      positionArray[i * 3 + 2] = (Math.random() - 0.5) * 2000;
-      sizes[i] = Math.random() * 2 + 0.5;
+    for (let i = 0; i < starCount * 3; i++) {
+      positionArray[i] = (Math.random() - 0.5) * 2000;
     }
 
-    starsGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(positionArray, 3)
-    );
-    starsGeometry.setAttribute(
-      "size",
-      new THREE.BufferAttribute(sizes, 1)
-    );
-
-    // Enhanced color palette for stars
-    const colors = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      const colorType = Math.random();
-      let r, g, b;
-
-      if (colorType < 0.7) {
-        r = 0.8 + Math.random() * 0.2;
-        g = 0.8 + Math.random() * 0.2;
-        b = 1.0;
-      } else if (colorType < 0.9) {
-        r = 0.8 + Math.random() * 0.2;
-        g = 0.4 + Math.random() * 0.3;
-        b = 1.0;
-      } else {
-        r = 1.0;
-        g = 0.8 + Math.random() * 0.2;
-        b = 0.4 + Math.random() * 0.3;
-      }
-
-      colors[i * 3] = r;
-      colors[i * 3 + 1] = g;
-      colors[i * 3 + 2] = b;
-    }
-
-    starsGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
     const starsMaterial = new THREE.PointsMaterial({
-      size: 1.8,
-      vertexColors: true,
+      size: 1.6,
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.9,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.8,
     });
 
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
     camera.position.z = 10;
 
-    let mouseX = 0;
-    let mouseY = 0;
-    const handleMouseMove = (event: MouseEvent) => {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
+    let animationFrameId: number;
 
     const animate = () => {
-      requestAnimationFrame(animate);
-
-      stars.rotation.y += 0.001 + mouseX * 0.0005;
-      stars.rotation.x += 0.0005 + mouseY * 0.0003;
-      stars.position.y = Math.sin(Date.now() * 0.0005) * 0.5;
-
+      animationFrameId = requestAnimationFrame(animate);
+      stars.rotation.y = smoothScrollY.get() * 0.0004 + 0.0002;
+      stars.rotation.x += 0.0001;
       renderer.render(scene, camera);
     };
 
@@ -497,107 +440,111 @@ export default function Projects() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     };
+
     window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       starsGeometry.dispose();
       starsMaterial.dispose();
     };
-  }, []);
+  }, [smoothScrollY]);
 
   return (
-    <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
-      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0" />
+    <div className="relative min-h-screen text-white font-sans overflow-x-hidden selection:bg-white selection:text-black">
+      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none" />
 
       <main className="relative z-10">
-        <div className="container mx-auto px-4 py-20">
-          <Section id="projects-intro">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl">
+          
+          {/* INTRO HERO */}
+          <Section id="projects-intro" indexCode="01" sectionLabel="Engineering & Systems Matrix">
             <motion.h1
-              className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
-              initial={{ opacity: 0, y: 50 }}
+              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 0.8 }}
             >
               My Projects
             </motion.h1>
+
             <motion.p
-              className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl leading-relaxed"
-              initial={{ opacity: 0, y: 50 }}
+              className="text-lg md:text-xl text-gray-300 max-w-3xl leading-relaxed font-light"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Explore my diverse portfolio of projects spanning web development,
-              machine learning, IoT, and game development. From personal innovations
-              to collaborative work with clubs and organizations.
+              Explore my diverse portfolio spanning Edge AI, local MCP context engines, decentralized security protocols, and full-stack web platforms.
             </motion.p>
           </Section>
 
-
-
-          {/* Personal Projects Section */}
-          <Section id="personal-projects">
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {/* PERSONAL PROJECTS */}
+          <Section id="personal-projects" indexCode="02" sectionLabel="Personal Innovations">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {personalProjects.map((project, index) => (
                 <ProjectCard key={`personal-${index}`} project={project} index={index} />
               ))}
             </div>
           </Section>
 
-          {/* Research & Ventures Section */}
-          <Section id="research-projects">
+          {/* RESEARCH & VENTURES */}
+          <Section id="research-projects" indexCode="03" sectionLabel="Research & Active Ventures">
             <motion.h2
-              className="text-4xl md:text-5xl font-bold mb-8 text-white"
-              initial={{ opacity: 0, x: -50 }}
+              className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               Research & Ventures (Concepts)
             </motion.h2>
+            
             <motion.p
-              className="text-lg text-gray-300 mb-8 max-w-3xl"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-sm md:text-base text-gray-300 mb-8 max-w-2xl font-light"
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Exploring the next generation of AI-developer tools and decentralized architectures. These are active concepts and ventures currently in development.
+              Exploring next-generation AI-developer tools and decentralized consensus models. Active concepts currently in development.
             </motion.p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               {researchProjects.map((project, index) => (
                 <ProjectCard key={`research-${index}`} project={project} index={index} />
               ))}
             </div>
           </Section>
 
-          {/* Work/Club Projects Section */}
-          <Section id="work-projects">
+          {/* WORK & CLUB PROJECTS */}
+          <Section id="work-projects" indexCode="04" sectionLabel="Club & Team Deployments">
             <motion.h2
-              className="text-4xl md:text-5xl font-bold mb-8 text-white"
-              initial={{ opacity: 0, x: -50 }}
+              className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               Club Work
             </motion.h2>
+
             <motion.p
-              className="text-lg text-gray-300 mb-8 max-w-3xl"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-sm md:text-base text-gray-300 mb-8 max-w-2xl font-light"
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Projects I&apos;ve contributed to through clubs, organizations, and collaborative efforts.
-              These showcase my ability to work in teams and contribute to larger initiatives.
+              Projects contributed through clubs, hackathons, and collaborative engineering teams at VIT Chennai.
             </motion.p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {workProjects.map((project, index) => (
                 <ProjectCard key={`work-${index}`} project={project} index={index} />
               ))}
             </div>
           </Section>
+
         </div>
       </main>
     </div>
