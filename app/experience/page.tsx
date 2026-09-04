@@ -8,8 +8,6 @@ import { Calendar } from "lucide-react";
 interface SectionProps {
   children: React.ReactNode;
   id: string;
-  indexCode?: string;
-  sectionLabel?: string;
 }
 
 interface Experience {
@@ -23,7 +21,7 @@ interface Experience {
   type: "clubs" | "experience";
 }
 
-const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel }) => {
+const Section: React.FC<SectionProps> = ({ children, id }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -38,16 +36,6 @@ const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="mb-16"
     >
-      {indexCode && (
-        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-6 font-mono text-xs text-white/50">
-          <div className="flex items-center space-x-2">
-            <span className="text-white/90 font-semibold">{indexCode}</span>
-            <span className="text-white/20">//</span>
-            <span className="text-white/90 font-medium tracking-wide uppercase">{sectionLabel}</span>
-          </div>
-          <span className="text-[10px] text-white/30 hidden sm:inline">[ TELEMETRY // LOGS ]</span>
-        </div>
-      )}
       {children}
     </motion.section>
   );
@@ -118,6 +106,18 @@ export default function ExperiencePage() {
 
   const experiences: Experience[] = [
     {
+      organization: "FinkAI",
+      logo: "finkai.jpg",
+      type: "experience",
+      positions: [
+        {
+          title: "Software Development Engineer (SDE) Intern",
+          duration: "May 2026 - Jul 2026",
+          description: "Contributed to an Elixir/Phoenix LiveView financial reporting platform powered by Apache Iceberg, DuckDB, and a custom multi-tenant SQLite PITR tool."
+        }
+      ]
+    },
+    {
       organization: "ANNAM.AI",
       logo: "annamai.png",
       type: "experience",
@@ -125,7 +125,7 @@ export default function ExperiencePage() {
         {
           title: "Project Intern",
           duration: "May 2025 - Jul 2025",
-          description: "Team won national 1st place at the Annam.ai Hackathon."
+          description: "Built a React Native and FastAPI platform with ESP32 integration for real-time agri-sensor data and fault-tolerant ingestion pipelines."
         }
       ]
     },
@@ -135,9 +135,9 @@ export default function ExperiencePage() {
       type: "experience",
       positions: [
         {
-          title: "Research Intern",
+          title: "Summer Research Intern",
           duration: "Jun 2025 - Jul 2025",
-          description: "Worked on ML-based detection systems."
+          description: "Implemented KNN classification for radiological safety zones and built a Next.js dashboard for real-time sensor monitoring."
         }
       ]
     },
@@ -147,9 +147,9 @@ export default function ExperiencePage() {
       type: "experience",
       positions: [
         {
-          title: "SDE Summer Internship",
+          title: "Software Development Engineer (SDE) Intern",
           duration: "May 2024 - Jul 2024",
-          description: "Contributed to development and API integrations for financial analytics platform."
+          description: "Engineered full-stack FinTech modules using React, Node.js, Express, and PostgreSQL, implementing OAuth 2.0 authentication."
         }
       ]
     },
@@ -161,7 +161,7 @@ export default function ExperiencePage() {
         {
           title: "Co-Founder",
           duration: "Dec 2024 - Dec 2025",
-          description: "Co-founded the startup and led initial product development."
+          description: "Co-founded the creator platform and led product architecture, engineering, and full-stack development."
         }
       ]
     },
@@ -235,6 +235,16 @@ export default function ExperiencePage() {
       description: "Secured 1st place out of 500+ teams for architecting an integrated hardware-software ecosystem for multilingual farm diagnostics."
     },
     {
+      title: "Finalist (Top 28 Teams) - ET AI Hackathon 2.0",
+      date: "2026",
+      description: "Finished among the top 28 finalist teams out of 60,000+ participants in the ET AI Hackathon 2.0."
+    },
+    {
+      title: "Amazon ML Summer School 2026 Scholar",
+      date: "2026",
+      description: "Selected as an Amazon ML Summer School Scholar, ranking in the top 2% among 134,000+ applicants nationwide."
+    },
+    {
       title: "Top 2% Finalist - India AI Impact Buildathon",
       date: "2026",
       description: "Achieved a Top 2% finish among 40,000+ participants in a national-level AI impact challenge hosted by HCL GUVI."
@@ -290,11 +300,7 @@ export default function ExperiencePage() {
         transition={{ duration: 0.5, delay: index * 0.08 }}
         whileHover={{ y: -4, scale: 1.02 }}
       >
-        {/* Micrographics Header Pill */}
-        <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-3 pb-2 border-b border-zinc-800">
-          <span>SPEC // EXP_0{index + 1}</span>
-          <span className="micro-tag text-[9px] uppercase">{experience.type}</span>
-        </div>
+        
 
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
@@ -344,9 +350,9 @@ export default function ExperiencePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl">
           
           {/* INTRO HERO */}
-          <Section id="experience-intro" indexCode="01" sectionLabel="Professional Track Record">
+          <Section id="experience-intro">
             <motion.h1
-              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0] bg-clip-text text-transparent tracking-tight leading-[1.15] pb-4 pt-1 inline-block"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -366,13 +372,14 @@ export default function ExperiencePage() {
           </Section>
 
           {/* INTERNSHIPS & WORK EXPERIENCE */}
-          <Section id="experience" indexCode="02" sectionLabel="Engineering & Internships">
+          <Section id="experience" >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {internshipExperiences.map((experience, index) => {
                 let theme: 'sky' | 'violet' | 'green' | 'orange' = 'sky';
                 if (experience.organization.includes("Channelise")) theme = 'violet';
                 else if (experience.organization.includes("ANNAM")) theme = 'green';
                 else if (experience.organization.includes("FinaHQ")) theme = 'orange';
+                else if (experience.organization.includes("Fink")) theme = 'sky';
 
                 return (
                   <ExperienceCard
@@ -387,7 +394,7 @@ export default function ExperiencePage() {
           </Section>
 
           {/* CLUB LEADERSHIP WORK */}
-          <Section id="club-experiences" indexCode="03" sectionLabel="Club Leadership & Teams">
+          <Section id="club-experiences" >
             <motion.h2
               className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
               initial={{ opacity: 0, x: -20 }}
@@ -419,8 +426,8 @@ export default function ExperiencePage() {
             </div>
           </Section>
 
-          {/* ACHIEVEMENTS & HONORS */}
-          <Section id="achievements" indexCode="04" sectionLabel="Honors & Achievements">
+          {/* ACHIEVEMENTS */}
+          <Section id="achievements" >
             <motion.h2
               className="text-3xl md:text-4xl font-bold mb-6 text-white tracking-tight"
               initial={{ opacity: 0, x: -20 }}
@@ -441,11 +448,6 @@ export default function ExperiencePage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -3, scale: 1.01 }}
                 >
-                  <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-2 pb-1.5 border-b border-zinc-800">
-                    <span>HONOR_0{index + 1}</span>
-                    <span className="micro-tag text-[9px]">NATIONAL</span>
-                  </div>
-
                   <h3 className="text-xl font-bold text-amber-100 group-hover:text-amber-300 transition-colors mb-2">
                     {item.title}
                   </h3>

@@ -8,8 +8,6 @@ import Link from "next/link";
 interface SectionProps {
   children: React.ReactNode;
   id: string;
-  indexCode?: string;
-  sectionLabel?: string;
 }
 
 interface Project {
@@ -23,7 +21,7 @@ interface Project {
   theme?: "sky" | "violet" | "orange" | "rose";
 }
 
-const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel }) => {
+const Section: React.FC<SectionProps> = ({ children, id }) => {
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
@@ -38,16 +36,6 @@ const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="mb-16"
     >
-      {indexCode && (
-        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-6 font-mono text-xs text-white/50">
-          <div className="flex items-center space-x-2">
-            <span className="text-white/90 font-semibold">{indexCode}</span>
-            <span className="text-white/20">//</span>
-            <span className="text-white/90 font-medium tracking-wide uppercase">{sectionLabel}</span>
-          </div>
-          <span className="text-[10px] text-white/30 hidden sm:inline">[ REPOSITORY // MATRIX ]</span>
-        </div>
-      )}
       {children}
     </motion.section>
   );
@@ -61,13 +49,21 @@ export default function Projects() {
   const projects: Project[] = [
     // Personal Projects
     {
-      title: "GlucoZap",
-      description: "Comprehensive healthcare ecosystem leveraging 7 distributed FastAPI microservices, YOLOv11/ResNet18 computer vision, and a LangChain RAG pipeline for medical document analysis.",
-      github: "https://github.com/mithilgirish/GlucoZap",
-      tech: ["FastAPI", "Next.js", "PyTorch", "LangChain", "Groq", "Microservices"],
+      title: "Crop-Core_Tech",
+      description: "A comprehensive crop yield prediction application leveraging machine learning algorithms, with seamless API integration and real-time state rainfall data analysis.",
+      github: "https://github.com/mithilgirish/Crop-Core_Tech",
+      tech: ["Python", "Machine Learning", "API", "Data Analysis"],
       type: "personal",
-      theme: "violet"
+      theme: "sky"
     },
+    {
+  
+  title: "Strand",
+description: "AI-powered construction intelligence platform for hyperscale data center EPC delivery and compliance.",  tech: ["LangGraph", "Neo4j", "FastAPI", "Next.js", "React Native"],
+  liveLink: "https://strand-docs.vercel.app/",
+  type: "personal",
+  theme: "violet"
+},
     {
       title: "MargDrishti",
       description: "Offline edge AI system for secure facial authentication and liveness verification in remote field operations.",
@@ -78,11 +74,27 @@ export default function Projects() {
     },
     {
       title: "CloudPilot",
-      description: "Distributed Edge–Cloud Autonomous Navigation System that offloads complex inference from ESP32/Raspberry Pi nodes to compute servers.",
+      description: "Distributed Edge-Cloud Autonomous Navigation System that offloads complex inference from ESP32/Raspberry Pi nodes to compute servers.",
       github: "https://github.com/mithilgirish/CloudPilot",
       tech: ["C", "IoT", "Distributed Systems", "Raspberry Pi"],
       type: "personal",
       theme: "violet"
+    },
+    {
+      title: "GlucoZap",
+      description: "Comprehensive healthcare ecosystem leveraging 7 distributed FastAPI microservices, YOLOv11/ResNet18 computer vision, and a LangChain RAG pipeline for medical document analysis.",
+      github: "https://github.com/mithilgirish/GlucoZap",
+      tech: ["FastAPI", "Next.js", "PyTorch", "LangChain", "Groq", "Microservices"],
+      type: "personal",
+      theme: "violet"
+    },
+     {
+      title: "Safedip",
+      description: "AI-Driven IoT swimming pool safety monitor featuring real-time ESP32 water chemistry telemetry, a PyTorch LSTM predictive maintenance engine, and a personalised Skin Safety AI.",
+      github: "https://github.com/mithilgirish/Safedip",
+      tech: ["FastAPI", "Next.js", "PyTorch", "ESP32", "IoT"],
+      type: "personal",
+      theme: "rose"
     },
     {
       title: "Macrowatch",
@@ -92,31 +104,8 @@ export default function Projects() {
       type: "personal",
       theme: "orange"
     },
-    {
-      title: "Apache Iceberg (Go)",
-      description: "Upstream contributions to the Apache Iceberg Go client, focusing on distributed data lakehouse storage and file deletion pipelines.",
-      github: "https://github.com/apache/iceberg-go",
-      tech: ["Go", "Apache Iceberg", "Data Engineering", "Open Source"],
-      type: "personal",
-      organization: "Open Source Contribution",
-      theme: "sky"
-    },
-    {
-      title: "Safedip",
-      description: "AI-Driven IoT swimming pool safety monitor featuring real-time ESP32 water chemistry telemetry, a PyTorch LSTM predictive maintenance engine, and a personalised Skin Safety AI.",
-      github: "https://github.com/mithilgirish/Safedip",
-      tech: ["FastAPI", "Next.js", "PyTorch", "ESP32", "IoT"],
-      type: "personal",
-      theme: "rose"
-    },
-    {
-      title: "Crop-Core_Tech",
-      description: "A comprehensive crop yield prediction application leveraging machine learning algorithms, with seamless API integration and real-time state rainfall data analysis.",
-      github: "https://github.com/mithilgirish/Crop-Core_Tech",
-      tech: ["Python", "Machine Learning", "API", "Data Analysis"],
-      type: "personal",
-      theme: "sky"
-    },
+   
+    
     {
       title: "Agroflow",
       description: "A smart agriculture platform designed to improve farming efficiency using modern technology like IoT-based monitoring, AI-powered insights, and secure digital traceability.",
@@ -284,9 +273,19 @@ export default function Projects() {
       title: "traz",
       description: "A local-first engineering memory layer and MCP server that provides AI coding tools with a shared, persistent context architecture.",
       github: "https://github.com/mithilgirish/traz",
+      liveLink: "https://traz.mithilgirish.dev/",
       tech: ["Rust", "SQLite", "MCP", "AI Agents", "Vector DB"],
       type: "research",
       theme: "violet"
+    },
+    {
+      title: "Apache Iceberg (Go)",
+      organization: "Open Source Contribution",
+      description: "Upstream contributions to the Apache Iceberg Go client, focusing on distributed data lakehouse storage and file deletion pipelines.",
+      github: "https://github.com/apache/iceberg-go",
+      tech: ["Go", "Apache Iceberg", "Data Engineering", "Open Source"],
+      type: "research",
+      theme: "sky"
     },
   ];
 
@@ -335,12 +334,6 @@ export default function Projects() {
         whileHover={{ y: -4, scale: 1.02 }}
       >
         <div>
-          {/* Micrographics Header Pill */}
-          <div className="flex justify-between items-center text-[10px] font-mono text-white/30 mb-3 pb-2 border-b border-zinc-800">
-            <span>MOD // PROJ_0{index + 1}</span>
-            <span className="micro-tag text-[9px] uppercase">{project.type}</span>
-          </div>
-
           <div className="flex justify-between items-start mb-3">
             <h3 className={`text-xl font-bold transition-colors ${t.text} font-sans`}>
               {project.title}
@@ -462,9 +455,9 @@ export default function Projects() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl">
           
           {/* INTRO HERO */}
-          <Section id="projects-intro" indexCode="01" sectionLabel="Engineering & Systems Matrix">
+          <Section id="projects-intro">
             <motion.h1
-              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+              className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0] bg-clip-text text-transparent tracking-tight leading-[1.15] pb-4 pt-1 inline-block"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -483,7 +476,7 @@ export default function Projects() {
           </Section>
 
           {/* PERSONAL PROJECTS */}
-          <Section id="personal-projects" indexCode="02" sectionLabel="Personal Innovations">
+          <Section id="personal-projects">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {personalProjects.map((project, index) => (
                 <ProjectCard key={`personal-${index}`} project={project} index={index} />
@@ -492,7 +485,7 @@ export default function Projects() {
           </Section>
 
           {/* RESEARCH & VENTURES */}
-          <Section id="research-projects" indexCode="03" sectionLabel="Research & Active Ventures">
+          <Section id="research-projects">
             <motion.h2
               className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
               initial={{ opacity: 0, x: -20 }}
@@ -511,7 +504,7 @@ export default function Projects() {
               Exploring next-generation AI-developer tools and decentralized consensus models. Active concepts currently in development.
             </motion.p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {researchProjects.map((project, index) => (
                 <ProjectCard key={`research-${index}`} project={project} index={index} />
               ))}
@@ -519,7 +512,7 @@ export default function Projects() {
           </Section>
 
           {/* WORK & CLUB PROJECTS */}
-          <Section id="work-projects" indexCode="04" sectionLabel="Club & Team Deployments">
+          <Section id="work-projects">
             <motion.h2
               className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight"
               initial={{ opacity: 0, x: -20 }}

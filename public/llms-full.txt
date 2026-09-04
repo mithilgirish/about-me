@@ -1,0 +1,130 @@
+﻿# Mithil Girish - Comprehensive Engineering Context & Knowledge Base (llms-full.txt)
+
+## Biographical Overview
+- **Full Name**: Mithil Girish
+- **Primary Domain**: Software Engineering, Data Science, Edge AI, Distributed Systems
+- **Current Location**: Chennai, Tamil Nadu, India
+- **Education**: Bachelor of Technology (B.Tech) in Computer Science and Engineering with Specialization in Data Science, Vellore Institute of Technology (VIT Chennai), 2023 – 2027.
+- **Current Primary Role**: Software Development Engineer (SDE) Intern at FinkAI.
+- **Ventures**: Co-Founder at Channelise.
+- **Open-Source Roles**: Contributor to Apache Iceberg Go SDK.
+- **Contact Email**: t.r.mithil@gmail.com
+- **Website**: https://www.mithilgirish.dev
+- **GitHub**: https://github.com/mithilgirish
+- **LinkedIn**: https://linkedin.com/in/mithilgirish
+
+---
+
+## Core Focus Areas & Research Interests
+1. **Context Intelligence & Memory Engines**: Engineering high-throughput, low-latency contextual retrieval architectures that fuse AST code intelligence with vector indexing.
+2. **Edge AI & High-Performance Inference**: Real-time object detection and classification on constrained hardware utilizing quantization, pruning, and models like YOLO-World.
+3. **Distributed Systems & Data Lakes**: Open table formats (Apache Iceberg), zero-copy data pipelines, decentralized state consensus, and scalable microservice architectures.
+
+---
+
+## Professional Experience
+
+### SDE Intern — FinkAI
+- **Duration**: December 2024 – Present
+- **Domain**: AI Agent Infrastructure & Distributed Backends
+- **Key Responsibilities & Impact**:
+  - Architected distributed backend microservices handling high-throughput event processing and LLM agent coordination.
+  - Engineered low-latency context feeding mechanisms and streaming response pipelines with sub-100ms response targets.
+  - Integrated caching hierarchies (Redis / In-memory) and asynchronous task queues to optimize GPU compute utilization.
+
+### Project Intern — ANNAM.AI
+- **Duration**: August 2024 – November 2024
+- **Domain**: Applied Machine Learning & Computer Vision
+- **Key Responsibilities & Impact**:
+  - Researched computer vision model distillation and quantization techniques for edge inference scenarios.
+  - Built automated evaluation benchmarks comparing latency vs. mAP for open-vocabulary detection architectures.
+  - Deployed containerized inference services with optimized Docker runtimes.
+
+### Project Intern — Indira Gandhi Centre for Atomic Research (IGCAR), Department of Atomic Energy (DAE)
+- **Duration**: June 2024 – July 2024
+- **Domain**: Scientific Computing & Telemetry Ingestion
+- **Key Responsibilities & Impact**:
+  - Developed automated data acquisition and sensor telemetry validation pipelines for scientific experiment logs.
+  - Applied statistical data processing and visualization algorithms to detect anomalies in multi-channel sensor readings.
+  - Streamlined data access workflows across research teams, reducing query turnaround times.
+
+### Co-Founder & Tech Lead — Channelise
+- **Duration**: May 2024 – Present
+- **Domain**: Creator Collaboration Platform
+- **Key Responsibilities & Impact**:
+  - Conceptualized and designed an end-to-end web platform connecting YouTube content creators with verified video editors and thumbnail artists.
+  - Built scalable full-stack application using Next.js, Supabase, Tailwind CSS, and WebSockets for real-time collaboration.
+  - Implemented secure project management workflows, escrow-ready billing checkpoints, and revision feedback channels.
+
+---
+
+## Notable Engineering Projects
+
+### 1. traz (Context Intelligence Engine)
+- **Tech Stack**: Rust, Go, SIMD, AST Parsers, Vector Quantization
+- **Overview**: A high-speed, local-first context intelligence daemon designed to index large codebases and project knowledge.
+- **Architecture**:
+  - **Rust Core**: Responsible for AST parsing, structural semantic chunking, and SIMD-accelerated embedding dot-product operations.
+  - **Go Daemon**: Handles daemonization, file watching, inter-process communication (IPC), and REST/gRPC client querying.
+- **Performance**: Capable of indexing code repositories at 50,000+ lines per second with sub-5ms query retrieval.
+
+### 2. Apache Iceberg Go (Open Source Contribution)
+- **Tech Stack**: Go, Apache Iceberg, Parquet, REST Catalog
+- **Overview**: Direct contributions to the official Go SDK of Apache Iceberg.
+- **Key Contributions**:
+  - Implemented serialization and deserialization routines for table metadata specs.
+  - Fixed partition specification parsing issues and enhanced compatibility with REST catalog endpoints.
+  - Added test suites ensuring strict adherence to the Iceberg Open Table Format specification.
+
+### 3. PACTUS (Decentralized Consensus Microservices)
+- **Tech Stack**: Hedera Hashgraph, Go, Docker, Microservices, gRPC
+- **Overview**: A tamper-evident verification architecture for mission-critical enterprise workflows.
+- **Key Features**:
+  - Employs Hedera Consensus Service (HCS) for fair-ordered, decentralized transaction verification without costly gas overhead.
+  - Implemented modular microservices communicating via high-speed gRPC channels with automated fallback strategies.
+
+### 4. AgroFlow (Precision Agriculture Platform)
+- **Tech Stack**: Python, YOLO-World, FastAPI, React Native, OpenCV
+- **Overview**: An intelligent edge-assisted agricultural diagnostic tool designed for smallholder and commercial farmers.
+- **Key Features**:
+  - Real-time crop disease detection and pest classification running zero-shot and fine-tuned YOLO-World architectures.
+  - Telemetry integration capturing soil moisture, ambient humidity, and temperature to calculate dynamic irrigation advisories.
+
+### 5. OnlyFounders
+- **Tech Stack**: Next.js, Tailwind CSS, TypeScript, Supabase
+- **Overview**: Progressive Web Application (PWA) facilitating closed-network collaboration, resource sharing, and peer advisory for startup founders.
+
+### 6. ParaCipher
+- **Tech Stack**: Python, Cryptography, OpenCV, Tkinter
+- **Overview**: Hackathon-winning cryptographic data security tool enabling multi-layered steganography and algorithmic file encryption.
+
+---
+
+## Technical Skills & Proficiencies
+- **Programming Languages**: Go, Python, Rust, TypeScript, JavaScript, SQL, C++, Java, C
+- **Frontend & App Development**: Next.js (App Router), React, React Native, Tailwind CSS, Framer Motion, HTML5, CSS3, Web Haptics
+- **Backend & APIs**: FastAPI, Gin, Node.js, Express, gRPC, WebSockets, RESTful API Design
+- **Databases & Storage**: PostgreSQL, DuckDB, Supabase, Redis, MongoDB, SQLite, Apache Iceberg
+- **DevOps, Cloud & Tooling**: Docker, Git, GitHub Actions, AWS (S3, EC2), Linux/Unix Environments, Vercel
+- **AI, ML & Vision**: PyTorch, Scikit-learn, OpenCV, YOLO-World, Model Quantization, RAG (Retrieval-Augmented Generation), Prompt Engineering
+
+---
+
+## Honors, Accolades & Leadership
+- **Amazon ML Summer School 2026 Scholar**: Selected in the top ~1.5% from tens of thousands of applicants nationwide. Underwent rigorous training in Supervised Deep Learning, LLM Fine-Tuning, and Distributed Training.
+- **Economic Times AI Hackathon 2.0 Finalist**: Reached the grand national finals for creating innovative autonomous multi-agent AI solutions.
+- **Competitive Hackathons**: Winner and finalist across several national and regional collegiate hackathons.
+- **Unsplash Verified Photographer**: 700,000+ views and 10,000+ downloads globally for architectural and landscape photography.
+
+---
+
+## Canonical Sitemap & Site Navigation
+- Home: https://www.mithilgirish.dev/
+- Projects: https://www.mithilgirish.dev/projects
+- Experience: https://www.mithilgirish.dev/experience
+- About: https://www.mithilgirish.dev/about
+- Gallery: https://www.mithilgirish.dev/gallery
+- Sitemap: https://www.mithilgirish.dev/sitemap.xml
+- Robots: https://www.mithilgirish.dev/robots.txt
+- LLMs Index: https://www.mithilgirish.dev/llms.txt
+- Full LLMs Context: https://www.mithilgirish.dev/llms-full.txt

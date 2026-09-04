@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;600;700&family=Share+Tech+Mono&family=Chakra+Petch:wght@400;500;600;700&display=swap');
+@import '@fontsource/dseg7-classic/index.css';
 
 @tailwind base;
 @tailwind components;
@@ -48,9 +49,22 @@ html, body {
   background: rgba(255, 255, 255, 0.035);
 }
 
+/* Canon Camera Viewfinder Typography (Dedicated to Camera Shutter Intro) */
+.font-canon-osd {
+  font-family: 'Share Tech Mono', 'Chakra Petch', monospace;
+  letter-spacing: 0.06em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-canon-segment {
+  font-family: 'DSEG7 Classic', 'Share Tech Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
 /* Ensure letter spacing and line height are adequate */
 h1 {
-  @apply text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600;
+  @apply text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0];
   line-height: 1.2;
   padding-bottom: 0.6rem;
   white-space: nowrap;
@@ -198,3 +212,41 @@ h1 {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Computer SVG Cursor */
+@media (hover: hover) and (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor body,
+  .has-custom-cursor a,
+  .has-custom-cursor button,
+  .has-custom-cursor input,
+  .has-custom-cursor select,
+  .has-custom-cursor textarea,
+  .has-custom-cursor [role="button"],
+  .has-custom-cursor [data-cursor-hover],
+  .has-custom-cursor .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+#custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate3d(-100px, -100px, 0);
+  will-change: transform;
+}
+
+@media (hover: none) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: auto !important;
+  }
+  #custom-cursor {
+    display: none !important;
+  }
+}

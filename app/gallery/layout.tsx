@@ -1,12 +1,30 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Gallery | Mithil Girish',
-    description: "Explore Mithil Girish's photography portfolio featuring stunning landscape, nature, and urban photography from India and beyond.",
+    title: 'Gallery',
+    description: "Photography portfolio of Mithil Girish. Over 700,000+ views on Unsplash, featuring architectural symmetry, natural landscapes, and high-precision visual frames.",
+    alternates: {
+        canonical: 'https://www.mithilgirish.dev/gallery',
+    },
     openGraph: {
-        title: 'Photography Gallery | Mithil Girish',
-        description: "Explore stunning photography by Mithil Girish. High-quality landscape and nature images available on Unsplash.",
+        title: 'Gallery | Mithil Girish',
+        description: "Photography portfolio of Mithil Girish with over 700,000+ views on Unsplash. Explore architectural, landscape, and urban visuals.",
+        url: 'https://www.mithilgirish.dev/gallery',
         type: 'website',
+        images: [
+            {
+                url: '/images/og-image.png',
+                width: 1200,
+                height: 630,
+                alt: 'Mithil Girish Photography Portfolio',
+            },
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Gallery | Mithil Girish',
+        description: "Photography portfolio of Mithil Girish with over 700,000+ views on Unsplash. Explore architectural, landscape, and urban visuals.",
+        images: ['/images/og-image.png'],
     },
 }
 
@@ -17,3 +35,4 @@ export default function GalleryLayout({
 }) {
     return <>{children}</>
 }
+

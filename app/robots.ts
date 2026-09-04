@@ -6,21 +6,26 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: '/private/',
+                disallow: ['/private/', '/api/'],
             },
             {
-                userAgent: 'GPTBot',
+                userAgent: [
+                    'GPTBot',
+                    'ChatGPT-User',
+                    'OAI-SearchBot',
+                    'Google-Extended',
+                    'ClaudeBot',
+                    'Claude-Web',
+                    'PerplexityBot',
+                    'Amazonbot',
+                    'Applebot',
+                    'cohere-ai',
+                ],
                 allow: '/',
             },
-            {
-                userAgent: 'Google-Extended',
-                allow: '/',
-            },
-            {
-                userAgent: 'ClaudeBot',
-                allow: '/',
-            }
         ],
         sitemap: 'https://www.mithilgirish.dev/sitemap.xml',
+        host: 'https://www.mithilgirish.dev',
     }
 }
+

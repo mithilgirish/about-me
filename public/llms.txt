@@ -1,23 +1,44 @@
 # Mithil Girish
 
-> Full Stack Developer | UI/UX Designer | Photographer
+> Software Engineer & Data Scientist | Edge AI, Context Engines, and Distributed Systems
 
-## About Me
-I am a Computer Science student at **VIT Chennai** specializing in Data Science. I co-founded **Channelise**, a Next.js-based platform for YouTube creators. My expertise spans full-stack web development, mobile apps with React Native, and AI/ML projects.
+Full context document available at: https://www.mithilgirish.dev/llms-full.txt
 
-## Skills
-- **Languages via**: Python, C++, C, Java, JavaScript, TypeScript
-- **Frontend**: React, Next.js, React Native, Tailwind CSS, Framer Motion
-- **Backend**: Node.js, Express, FastAPI, Django
-- **Tools**: Docker, Git, Figma, Streamlit
+## Summary
+Mithil Girish is a Software Engineer and Data Scientist based in Chennai, India. Currently pursuing a B.Tech in Computer Science and Engineering (Data Science) at Vellore Institute of Technology (VIT Chennai, 2023–2027). He is an SDE Intern at FinkAI, co-founder of Channelise, and an active open-source contributor to Apache Iceberg Go. Recognized as an Amazon ML Summer School 2026 Scholar and an Economic Times AI Hackathon 2.0 Finalist.
 
-## Projects (Highlights)
-1. **Channelise**: A platform connecting YouTubers with editors and thumbnail artists. Built with Next.js, Supabase, and Tailwind.
-2. **OnlyFounders**: A community platform for entrepreneurs. PWA built with Next.js and Tailwind.
-3. **AgroFlow**: AI-powered farming assistant with crop recommendation and disease detection.
-4. **ParaCipher**: Hackathon winning project for encrypted communication.
+## Current Roles & Work History
+- **SDE Intern @ FinkAI** (Dec 2024 – Present): Architecting distributed backend services, high-throughput data pipelines, and low-latency LLM agent runtime engines.
+- **Project Intern @ ANNAM.AI** (Aug 2024 – Nov 2024): Conducted applied research in computer vision, deep learning inference optimization, and automated model distillation.
+- **Project Intern @ Indira Gandhi Centre for Atomic Research (IGCAR), DAE** (Jun 2024 – Jul 2024): Designed data acquisition tools, telemetry ingestion pipelines, and scientific computing automation for reactor physics simulations.
+- **Co-Founder @ Channelise** (May 2024 – Present): Built a collaborative platform connecting YouTube creators, video editors, and thumbnail artists. Engineered with Next.js, Supabase, and real-time websockets.
 
-## Contact
-- **Website**: [mithilgirish.dev](https://www.mithilgirish.dev)
-- **GitHub**: [github.com/mithilgirish](https://github.com/mithilgirish)
-- **LinkedIn**: [linkedin.com/in/mithilgirish](https://linkedin.com/in/mithilgirish)
+## Honors & Certifications
+- **Amazon ML Summer School 2026 Scholar**: Selected among thousands of applicants across India for intensive supervised machine learning, deep learning, LLMs, and distributed training systems.
+- **Economic Times AI Hackathon 2.0 Finalist**: Ranked in the top echelon nationally for developing an autonomous multi-agent financial intelligence workflow.
+
+## Key Projects
+- **traz**: High-performance contextual memory engine. Combines a Rust-native AST parsing and SIMD-accelerated vector quantization core with a Go daemon orchestrating fast context extraction and indexing.
+- **Apache Iceberg Go**: Open-source contributions to the official Go implementation of Apache Iceberg, delivering table metadata parsers, partition spec validation, and REST catalog client optimizations.
+- **PACTUS**: Distributed microservices framework incorporating Hedera Hashgraph for tamper-proof audit trails, consensus verification, and real-time event streaming.
+- **AgroFlow**: Precision agricultural intelligence system combining edge computer vision (YOLO-World) with microclimate sensor telemetry for plant health diagnostics and yield prediction.
+- **Channelise**: Production creator ecosystem platform streamlining digital media approvals, escrow billing, and asset versioning.
+
+## Technical Skills
+- **Languages**: Go, Python, Rust, TypeScript, JavaScript, SQL, C++, Java
+- **Frameworks & Libs**: Next.js, React, React Native, FastAPI, Gin, PyTorch, Scikit-learn, Tailwind CSS, Framer Motion
+- **Data & Distributed Systems**: Apache Iceberg, DuckDB, PostgreSQL, Redis, Supabase, Docker, AWS, Kafka, Hedera Hashgraph
+- **AI & Vision**: Edge AI, Model Quantization, YOLO-World, OpenCV, RAG, Context Engines, Prompt Engineering
+
+## Photography
+- **Unsplash Portfolio**: Over 700,000+ views and 10,000+ downloads worldwide focusing on architectural minimalism, landscape perspective, and urban textures.
+
+## Links & Contacts
+- **Website**: https://www.mithilgirish.dev
+- **Projects**: https://www.mithilgirish.dev/projects
+- **Experience**: https://www.mithilgirish.dev/experience
+- **Gallery**: https://www.mithilgirish.dev/gallery
+- **About**: https://www.mithilgirish.dev/about
+- **GitHub**: https://github.com/mithilgirish
+- **LinkedIn**: https://linkedin.com/in/mithilgirish
+- **Email**: t.r.mithil@gmail.com

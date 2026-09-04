@@ -130,39 +130,63 @@ const About: React.FC = () => {
   const skillCategories = [
     {
       code: '01',
-      tag: 'WEB',
-      title: 'Web Development',
-      skills: ['React.js, Next.js', 'TypeScript, JavaScript', 'Tailwind CSS, ShadCN/UI', 'FastAPI, Django, Node.js'],
+      tag: 'LANGUAGES',
+      title: 'Languages',
+      skills: [
+        'Python, JavaScript, TypeScript',
+        'Java, Go, SQL',
+        'C/C++',
+      ],
     },
     {
       code: '02',
-      tag: 'MOBILE',
-      title: 'Mobile Development',
-      skills: ['React Native, Expo', 'Progressive Web Apps (PWA)', 'Clerk Auth, Supabase'],
+      tag: 'FRAMEWORKS',
+      title: 'Frameworks',
+      skills: [
+        'React, Next.js, React Native',
+        'FastAPI, Django, Express',
+        'Tailwind CSS, Node.js',
+      ],
     },
     {
       code: '03',
       tag: 'DATA & AI',
       title: 'Data & AI',
-      skills: ['Python (Data Science)', 'Machine Learning, GenAI', 'PostgreSQL, MongoDB, MySQL', 'Supabase, Firebase'],
+      skills: [
+        'OpenCV, Scikit-learn, YOLO-World',
+        'Apache Iceberg, DuckDB',
+        'Machine Learning, Deep Learning, GenAI',
+      ],
     },
     {
       code: '04',
-      tag: 'WEB3',
-      title: 'Blockchain & Web3',
-      skills: ['Solidity, Smart Contracts', 'Ethereum, DeFi Protocols'],
+      tag: 'DEV TOOLS',
+      title: 'Dev Tools & Cloud',
+      skills: [
+        'Git/GitHub, Docker, AWS',
+        'PostgreSQL, MongoDB, MySQL, SQLite',
+        'Supabase, Firebase, Clerk',
+      ],
     },
     {
       code: '05',
-      tag: 'HARDWARE',
-      title: 'Hardware & IoT',
-      skills: ['ESP32, Arduino', 'Sensor Integration', 'Embedded Systems'],
+      tag: 'HARDWARE & WEB3',
+      title: 'Hardware & Web3',
+      skills: [
+        'ESP32, Arduino, Microcontrollers',
+        'Sensor Integration & Embedded IoT',
+        'Smart Contracts, DeFi Protocols',
+      ],
     },
     {
       code: '06',
       tag: 'CREATIVE',
-      title: 'Creative & Optics',
-      skills: ['Adobe Photoshop, Figma', 'UI/UX Design', 'Professional Photography', 'Unsplash Contributor (700k+ Views)'],
+      title: 'Creative & Design',
+      skills: [
+        'UI/UX Design, Figma',
+        'Adobe Photoshop, Creative Direction',
+        'Professional Photography (700k+ Views)',
+      ],
     },
   ];
 
@@ -186,7 +210,7 @@ const About: React.FC = () => {
                 whileHover={{ y: -4 }}
               >
                 <div className="relative group w-fit">
-                  <div className="absolute inset-0 -m-2 bg-gradient-to-r from-blue-500/40 via-purple-500/40 to-pink-500/40 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-700"></div>
+                  <div className="absolute inset-0 -m-2 bg-gradient-to-r from-[#EBF4F5]/30 via-[#B5C6E0]/40 to-[#93B5D6]/35 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-700"></div>
 
                   <img
                     src="/images/DP-mithil.png"
@@ -200,14 +224,8 @@ const About: React.FC = () => {
 
               {/* Bio Copy */}
               <div className="lg:w-2/3">
-                <div className="flex items-center space-x-2 font-mono text-xs text-white/50 mb-2">
-                  <span>01</span>
-                  <span>//</span>
-                  <span>BIOGRAPHY</span>
-                </div>
-
                 <motion.h1
-                  className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent tracking-tight pb-2"
+                  className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0] bg-clip-text text-transparent tracking-tight leading-[1.15] pb-4 pt-1 inline-block"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
@@ -237,16 +255,7 @@ const About: React.FC = () => {
 
           {/* STACK & ARCHITECTURE */}
           <Section id="skills">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-6">
-              <div className="flex items-center space-x-2 font-mono text-xs text-white/50">
-                <span>02</span>
-                <span>//</span>
-                <span>STACK & ARCHITECTURE</span>
-              </div>
-              <span className="font-mono text-[10px] text-white/30">[ 06 CATEGORIES ]</span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-semibold mb-8 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent pb-1">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-8 bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0] bg-clip-text text-transparent leading-[1.2] pb-3 pt-1 inline-block">
               Stack & Architecture
             </h2>
 
@@ -261,14 +270,14 @@ const About: React.FC = () => {
                   whileHover={{ y: -4, borderColor: 'rgba(255, 255, 255, 0.25)' }}
                   className="bg-zinc-900/60 p-6 rounded-xl border border-zinc-800 backdrop-blur-md transition-all group relative overflow-hidden"
                 >
-                  <div className="flex justify-between items-center text-[10px] font-mono text-white/40 mb-3 pb-2 border-b border-zinc-800">
-                    <span>SPEC // {cat.code}</span>
-                    <span className="micro-tag text-[9px]">{cat.tag}</span>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-xl font-medium text-blue-400 font-sans">
+                      {cat.title}
+                    </h3>
+                    <span className="px-2 py-0.5 text-[10px] bg-zinc-800/80 text-blue-300 rounded border border-blue-900/40 font-mono flex-shrink-0">
+                      {cat.tag}
+                    </span>
                   </div>
-
-                  <h3 className="text-xl font-medium text-blue-400 mb-3 font-sans">
-                    {cat.title}
-                  </h3>
 
                   <ul className="space-y-2 text-sm font-sans text-gray-300">
                     {cat.skills.map((skill, sIdx) => (
@@ -285,12 +294,6 @@ const About: React.FC = () => {
 
           {/* CONNECT WITH ME */}
           <Section id="contact">
-            <div className="flex items-center space-x-2 font-mono text-xs text-white/50 mb-2 border-b border-white/10 pb-3">
-              <span>03</span>
-              <span>//</span>
-              <span>CONNECT & LINKS</span>
-            </div>
-
             <h2 className="text-3xl md:text-4xl font-semibold mb-6">Connect with Me</h2>
 
             <motion.div

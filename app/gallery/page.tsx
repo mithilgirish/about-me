@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import * as THREE from 'three';
 import { useInView } from 'react-intersection-observer';
 import { Eye, Download, ExternalLink, X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import CameraTransition from "@/components/CameraTransition";
+import { triggerHaptic } from "@/lib/haptics";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -61,203 +62,393 @@ const Lightbox: React.FC<{
   onPrev: () => void;
 }> = ({ photo, hasPrev, hasNext, currentIndex, totalCount, onClose, onNext, onPrev }) => {
   const [zoom, setZoom] = useState<number>(1);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const touchDistanceRef = useRef<number | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lastTapRef = useRef<number>(0);
+
+  const resetPosition = useCallback(() => {
+    animate(x, 0, { type: "spring", stiffness: 400, damping: 35 });
+    animate(y, 0, { type: "spring", stiffness: 400, damping: 35 });
+  }, [x, y]);
 
   useEffect(() => {
     setZoom(1);
-  }, [photo?.id]);
+    x.set(0);
+    y.set(0);
+  }, [photo?.id, x, y]);
+
+  useEffect(() => {
+    if (zoom === 1) {
+      resetPosition();
+    } else {
+      // If zoom decreases, ensure image position doesn't exceed new drag constraints
+      const maxDragX = Math.round((zoom - 1) * 360);
+      const maxDragY = Math.round((zoom - 1) * 260);
+      if (Math.abs(x.get()) > maxDragX) {
+        animate(x, Math.sign(x.get()) * maxDragX, { type: "spring", stiffness: 400, damping: 35 });
+      }
+      if (Math.abs(y.get()) > maxDragY) {
+        animate(y, Math.sign(y.get()) * maxDragY, { type: "spring", stiffness: 400, damping: 35 });
+      }
+    }
+  }, [zoom, resetPosition, x, y]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight' && hasNext) onNext();
-      if (e.key === 'ArrowLeft' && hasPrev) onPrev();
+      if (e.key === 'Escape') {
+        triggerHaptic("selection");
+        onClose();
+      }
+      if (e.key === 'ArrowRight' && hasNext) {
+        triggerHaptic("selection");
+        onNext();
+      }
+      if (e.key === 'ArrowLeft' && hasPrev) {
+        triggerHaptic("selection");
+        onPrev();
+      }
+      if (e.key === '+' || e.key === '=') {
+        triggerHaptic("light");
+        setZoom(z => Math.min(3.5, +(z + 0.5).toFixed(1)));
+      }
+      if (e.key === '-' || e.key === '_') {
+        triggerHaptic("light");
+        setZoom(z => Math.max(1, +(z - 0.5).toFixed(1)));
+      }
+      if (e.key === '0') {
+        triggerHaptic("medium");
+        setZoom(1);
+        resetPosition();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, onNext, onPrev, hasNext, hasPrev]);
+  }, [onClose, onNext, onPrev, hasNext, hasPrev, resetPosition]);
+
+  // Double-click to toggle zoom on desktop
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    triggerHaptic("medium");
+    if (zoom > 1) {
+      setZoom(1);
+      resetPosition();
+    } else {
+      setZoom(2);
+    }
+  };
+
+  // Mouse wheel zoom on web
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY * -0.002;
+    setZoom(prev => {
+      const next = Math.min(3.5, Math.max(1, +(prev + delta).toFixed(2)));
+      if (next === 1) resetPosition();
+      return next;
+    });
+  };
+
+  // Touch handlers for mobile: pinch-to-zoom, double-tap, and swipe navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      // Two-finger pinch start
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      touchDistanceRef.current = dist;
+      return;
+    }
+
+    if (e.touches.length === 1) {
+      touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      const now = Date.now();
+      if (now - lastTapRef.current < 300) {
+        // Double-tap detected
+        e.preventDefault();
+        triggerHaptic("medium");
+        if (zoom > 1) {
+          setZoom(1);
+          resetPosition();
+        } else {
+          setZoom(2);
+        }
+      }
+      lastTapRef.current = now;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && touchDistanceRef.current !== null) {
+      // Pinch to zoom scaling
+      e.preventDefault();
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const diff = (dist - touchDistanceRef.current) * 0.007;
+      setZoom(z => {
+        const next = Math.min(3.5, Math.max(1, +(z + diff).toFixed(2)));
+        if (next === 1) resetPosition();
+        return next;
+      });
+      touchDistanceRef.current = dist;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchDistanceRef.current = null;
+    // Horizontal swipe navigation when not zoomed
+    if (zoom === 1 && touchStartRef.current && e.changedTouches.length === 1) {
+      const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+      const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+      if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+        if (deltaX < 0 && hasNext) {
+          triggerHaptic("selection");
+          onNext();
+        } else if (deltaX > 0 && hasPrev) {
+          triggerHaptic("selection");
+          onPrev();
+        }
+      }
+    }
+    touchStartRef.current = null;
+  };
 
   if (!photo) return null;
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 md:p-8 backdrop-blur-2xl"
+        className="fixed inset-0 bg-black/95 z-[9999] flex flex-col justify-between select-none overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onClick={onClose}
+        transition={{ duration: 0.2 }}
       >
-        {/* Top Control Bar (Apple Liquid Glass Pill) */}
-        <div className="absolute top-5 left-5 right-5 flex justify-between items-center z-50 text-white/90 font-sans text-xs px-2 pointer-events-none">
-          <div className="pointer-events-auto flex items-center px-4 py-2 rounded-full bg-white/[0.08] hover:bg-white/[0.12] border border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.37)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] transition-all">
-            <span className="text-white/95 font-medium tracking-wide">
+        {/* Top Control Header Bar */}
+        <div className="w-full px-3 sm:px-6 py-3 flex items-center justify-between z-40 bg-gradient-to-b from-black/90 via-black/60 to-transparent gap-2 pointer-events-auto">
+          {/* Index Counter Pill */}
+          <div className="flex items-center px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-xl shadow-md">
+            <span className="text-white/90 font-mono text-xs font-semibold tracking-wide">
               {currentIndex >= 0 ? `${currentIndex + 1} / ${totalCount}` : photo.id}
             </span>
           </div>
 
           {/* Zoom & Action Controls */}
-          <div className="pointer-events-auto flex items-center space-x-3">
-            <div className="flex items-center gap-1.5 bg-white/[0.08] px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.37)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]">
-              <button
-                className={`p-1 rounded-full transition-all ${
-                  zoom <= 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/20 text-white'
-                }`}
-                onClick={(e) => { e.stopPropagation(); setZoom(z => Math.max(z - 0.5, 1)); }}
-                disabled={zoom <= 1}
-                aria-label="Zoom out"
-              >
-                <ZoomOut size={14} />
-              </button>
-              <span className="text-[11px] font-mono text-white/95 min-w-[36px] text-center select-none font-medium">
-                {Math.round(zoom * 100)}%
-              </span>
-              <button
-                className={`p-1 rounded-full transition-all ${
-                  zoom >= 3 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/20 text-white'
-                }`}
-                onClick={(e) => { e.stopPropagation(); setZoom(z => Math.min(z + 0.5, 3)); }}
-                disabled={zoom >= 3}
-                aria-label="Zoom in"
-              >
-                <ZoomIn size={14} />
-              </button>
-              {zoom > 1 && (
-                <button
-                  className="p-1 rounded-full hover:bg-white/20 text-cyan-300 transition-all ml-0.5"
-                  onClick={(e) => { e.stopPropagation(); setZoom(1); }}
-                  aria-label="Reset zoom"
-                >
-                  <RotateCcw size={13} />
-                </button>
-              )}
-            </div>
-
+          <div className="flex items-center gap-1.5 bg-white/[0.08] px-2.5 py-1 rounded-full border border-white/15 backdrop-blur-xl shadow-md">
             <button
-              className="p-2.5 rounded-full bg-white/[0.08] hover:bg-white/[0.2] text-white transition-all border border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.37)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]"
-              onClick={onClose}
-              aria-label="Close modal"
+              className="p-1 rounded-full hover:bg-white/20 text-white disabled:opacity-30 transition-all active:scale-90"
+              data-cursor-mode="zoom-out"
+              onClick={() => {
+                triggerHaptic("light");
+                setZoom(z => {
+                  const next = Math.max(1, +(z - 0.5).toFixed(1));
+                  if (next === 1) resetPosition();
+                  return next;
+                });
+              }}
+              disabled={zoom <= 1}
+              aria-label="Zoom out"
             >
-              <X size={18} />
+              <ZoomOut size={15} />
             </button>
+            <span className="text-xs font-mono text-white/95 min-w-[38px] text-center select-none font-semibold">
+              {Math.round(zoom * 100)}%
+            </span>
+            <button
+              className="p-1 rounded-full hover:bg-white/20 text-white disabled:opacity-30 transition-all active:scale-90"
+              data-cursor-mode="zoom-in"
+              onClick={() => {
+                triggerHaptic("light");
+                setZoom(z => Math.min(3.5, +(z + 0.5).toFixed(1)));
+              }}
+              disabled={zoom >= 3.5}
+              aria-label="Zoom in"
+            >
+              <ZoomIn size={15} />
+            </button>
+            {zoom > 1 && (
+              <button
+                className="p-1 rounded-full hover:bg-white/20 text-cyan-300 transition-all ml-0.5 active:scale-90"
+                onClick={() => {
+                  triggerHaptic("medium");
+                  setZoom(1);
+                  resetPosition();
+                }}
+                aria-label="Reset zoom"
+                title="Reset zoom"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
           </div>
+
+          {/* Close Button */}
+          <button
+            className="p-2 rounded-full bg-white/[0.08] hover:bg-white/[0.2] text-white transition-all border border-white/15 backdrop-blur-xl shadow-md active:scale-90"
+            onClick={() => {
+              triggerHaptic("selection");
+              onClose();
+            }}
+            aria-label="Close modal"
+          >
+            <X size={18} />
+          </button>
         </div>
 
-        {/* State-Aware Apple Liquid Glass Navigation Arrows */}
-        {hasPrev && (
-          <motion.button
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/90 hover:text-white p-4 z-50 rounded-full bg-white/[0.08] hover:bg-white/[0.18] border border-white/25 backdrop-blur-2xl transition-all shadow-[0_16px_36px_rgba(0,0,0,0.6)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.35)]"
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -12 }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.94 }}
-            onClick={(e) => { e.stopPropagation(); onPrev(); }}
-            aria-label="Previous image"
-          >
-            <ChevronLeft size={24} />
-          </motion.button>
-        )}
-
-        {hasNext && (
-          <motion.button
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/90 hover:text-white p-4 z-50 rounded-full bg-white/[0.08] hover:bg-white/[0.18] border border-white/25 backdrop-blur-2xl transition-all shadow-[0_16px_36px_rgba(0,0,0,0.6)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.35)]"
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 12 }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.94 }}
-            onClick={(e) => { e.stopPropagation(); onNext(); }}
-            aria-label="Next image"
-          >
-            <ChevronRight size={24} />
-          </motion.button>
-        )}
-
-        {/* Apple Liquid Glass Container */}
-        <motion.div
-          className="max-w-5xl max-h-[86vh] relative rounded-3xl overflow-hidden border border-white/20 bg-white/[0.04] p-3 md:p-4 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.85)] backdrop-blur-3xl flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.25)]"
-          initial={{ scale: 0.94, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.94, opacity: 0 }}
-          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          onClick={(e) => e.stopPropagation()}
+        {/* Center Stage / Image Viewport */}
+        <div
+          className="flex-1 w-full relative flex items-center justify-center overflow-hidden p-2 sm:p-4 touch-none"
+          onClick={() => {
+            if (zoom === 1) {
+              triggerHaptic("selection");
+              onClose();
+            }
+          }}
         >
-          <div className="relative overflow-auto rounded-2xl flex items-center justify-center min-h-[40vh] max-h-[72vh] cursor-pointer bg-black/40 border border-white/10">
+          {/* Desktop/Tablet Left Navigation Arrow */}
+          {hasPrev && zoom === 1 && (
+            <motion.button
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 text-white/90 hover:text-white p-3.5 z-30 rounded-full bg-white/[0.08] hover:bg-white/[0.2] border border-white/20 backdrop-blur-xl transition-all shadow-xl active:scale-95"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                triggerHaptic("selection");
+                onPrev();
+              }}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={22} />
+            </motion.button>
+          )}
+
+          {/* Desktop/Tablet Right Navigation Arrow */}
+          {hasNext && zoom === 1 && (
+            <motion.button
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 text-white/90 hover:text-white p-3.5 z-30 rounded-full bg-white/[0.08] hover:bg-white/[0.2] border border-white/20 backdrop-blur-xl transition-all shadow-xl active:scale-95"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                triggerHaptic("selection");
+                onNext();
+              }}
+              aria-label="Next image"
+            >
+              <ChevronRight size={22} />
+            </motion.button>
+          )}
+
+          {/* Interactive Zoomable & Pannable Image Canvas */}
+          <motion.div
+            key={photo.id}
+            data-cursor-mode={zoom > 1 ? "grab" : "zoom-in"}
+            drag={zoom > 1}
+            dragConstraints={{
+              left: -Math.round((zoom - 1) * 360),
+              right: Math.round((zoom - 1) * 360),
+              top: -Math.round((zoom - 1) * 260),
+              bottom: Math.round((zoom - 1) * 260),
+            }}
+            dragElastic={0.15}
+            animate={{ scale: zoom }}
+            transition={{ type: "spring", stiffness: 350, damping: 32 }}
+            whileDrag={{ cursor: "grabbing" }}
+            style={{
+              x,
+              y,
+              cursor: zoom > 1 ? "grab" : "zoom-in",
+              touchAction: zoom > 1 ? "none" : "auto",
+            }}
+            className="relative flex items-center justify-center max-w-full max-h-full will-change-transform select-none"
+            onClick={(e) => e.stopPropagation()}
+            onDoubleClick={handleDoubleClick}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onWheel={handleWheel}
+          >
             <img
               src={photo.urls.full}
               alt={photo.alt_description || 'Photography by Mithil Girish'}
-              style={{ transform: `scale(${zoom})`, transition: 'transform 0.25s ease-out' }}
-              className="max-w-full max-h-[70vh] object-contain rounded-xl mx-auto shadow-2xl select-none"
-              onClick={(e) => {
-                e.stopPropagation();
-                setZoom(z => (z === 1 ? 1.8 : 1));
-              }}
+              className="max-h-[calc(100vh-175px)] sm:max-h-[calc(100vh-155px)] max-w-[96vw] sm:max-w-[88vw] object-contain rounded-xl shadow-2xl pointer-events-none select-none"
+              draggable={false}
             />
+          </motion.div>
+        </div>
+
+        {/* Bottom Action Footer Bar */}
+        <div className="w-full px-3 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-t from-black/95 via-black/75 to-transparent z-40 border-t border-white/10 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 pointer-events-auto">
+          <div className="flex flex-col text-left max-w-md w-full sm:w-auto">
+            <p className="text-white text-xs sm:text-sm font-medium capitalize tracking-wide truncate">
+              {photo.alt_description || 'Photography by Mithil Girish'}
+            </p>
+            {photo.statistics && (
+              <div className="flex gap-4 mt-1 text-[11px] sm:text-xs text-white/70 font-sans">
+                <span className="flex items-center gap-1.5">
+                  <Eye size={13} className="text-cyan-400" /> {photo.statistics.views.total.toLocaleString()} views
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Download size={13} className="text-emerald-400" /> {photo.statistics.downloads.total.toLocaleString()} downloads
+                </span>
+              </div>
+            )}
           </div>
 
-          {/* Liquid Glass Action bar */}
-          <div className="mt-3 bg-white/[0.06] p-4 rounded-2xl flex flex-wrap justify-between items-center border border-white/15 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] gap-3">
-            <div className="flex flex-col text-left max-w-xl">
-              <p className="text-white text-sm font-medium capitalize tracking-wide">
-                {photo.alt_description || 'Photography by Mithil Girish'}
-              </p>
-              {photo.statistics && (
-                <div className="flex gap-4 mt-1.5 text-xs text-white/70 font-sans">
-                  <span className="flex items-center gap-1.5">
-                    <Eye size={13} className="text-cyan-400" /> {photo.statistics.views.total.toLocaleString()} views
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Download size={13} className="text-emerald-400" /> {photo.statistics.downloads.total.toLocaleString()} downloads
-                  </span>
-                </div>
-              )}
-            </div>
+          <div className="flex gap-2 sm:gap-3 text-xs font-sans w-full sm:w-auto justify-end">
+            <a
+              href={photo.links.html}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all border border-white/20 font-medium backdrop-blur-md active:scale-95"
+              onClick={() => triggerHaptic("medium")}
+            >
+              <ExternalLink size={13} />
+              <span>Unsplash</span>
+            </a>
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-medium rounded-xl transition-all border border-zinc-700 shadow-md backdrop-blur-md hover:scale-[1.02] active:scale-[0.96]"
+              onClick={async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                triggerHaptic("medium");
 
-            <div className="flex gap-3 text-xs font-sans">
-              <a
-                href={photo.links.html}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all border border-white/20 font-medium backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ExternalLink size={14} />
-                <span>Unsplash</span>
-              </a>
-              <button
-                className="flex items-center gap-2 px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-medium rounded-xl transition-all border border-zinc-700 shadow-md backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  
-                  // Trigger Unsplash API download location ping
-                  axios.get(photo.links.download_location, {
-                    headers: { Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}` }
-                  }).catch(() => {});
+                // Trigger Unsplash API download location ping
+                axios.get(photo.links.download_location, {
+                  headers: { Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}` }
+                }).catch(() => {});
 
-                  try {
-                    const response = await fetch(photo.urls.full);
-                    const blob = await response.blob();
-                    const blobUrl = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = `mithilgirish-${photo.id}.jpg`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(blobUrl);
-                  } catch {
-                    // Fallback to opening direct link
-                    window.open(photo.urls.full, '_blank');
-                  }
-                }}
-              >
-                <Download size={15} className="text-zinc-300" />
-                <span className="tracking-wide">Download Image</span>
-              </button>
-            </div>
+                try {
+                  const response = await fetch(photo.urls.full);
+                  const blob = await response.blob();
+                  const blobUrl = URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = blobUrl;
+                  link.download = `mithilgirish-${photo.id}.jpg`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(blobUrl);
+                } catch {
+                  window.open(photo.urls.full, '_blank');
+                }
+              }}
+            >
+              <Download size={14} className="text-zinc-300" />
+              <span className="tracking-wide">Download Image</span>
+            </button>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
@@ -421,7 +612,7 @@ const Gallery: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-4 text-left">
               <div>
                 <motion.h1
-                  className="text-5xl md:text-7xl font-bold mb-3 bg-gradient-to-r from-[#60A5FA] via-[#A78BFA] to-[#F472B6] bg-clip-text text-transparent tracking-tight leading-[1.15] pb-4 pt-1 inline-block"
+                  className="text-5xl md:text-7xl font-bold mb-3 bg-gradient-to-r from-[#EBF4F5] to-[#B5C6E0] bg-clip-text text-transparent tracking-tight leading-[1.15] pb-4 pt-1 inline-block"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
@@ -476,6 +667,7 @@ const Gallery: React.FC = () => {
                     photos.map((photo, index) => (
                       <motion.div
                         key={photo.id}
+                        data-cursor-mode="zoom-in"
                         className="break-inside-avoid mb-6 rounded-xl overflow-hidden shadow-2xl cursor-pointer group border border-white/10 hover:border-white/30 transition-all relative bg-slate-950"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

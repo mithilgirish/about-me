@@ -141,19 +141,7 @@ const Section: React.FC<SectionProps> = ({ children, id, indexCode, sectionLabel
       className="mb-20"
     >
       <div className="micro-glass-card rounded-2xl p-6 sm:p-10 relative overflow-hidden">
-        {/* Subtle Section Header Micrographic Label */}
-        {indexCode && (
-          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-8 font-mono text-xs text-white/50">
-            <div className="flex items-center space-x-2">
-              <span className="text-white/80 font-semibold">{indexCode}</span>
-              <span className="text-white/20">//</span>
-              <span className="text-white/80 font-medium tracking-wide uppercase">{sectionLabel}</span>
-            </div>
-            <div className="text-[10px] text-white/30 hidden sm:block">
-              [ REF // 0x992F ]
-            </div>
-          </div>
-        )}
+        
 
         <div className="relative z-10 text-center">
           {children}
